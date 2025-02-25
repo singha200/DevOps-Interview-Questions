@@ -6,7 +6,7 @@
 
 Welcome to **DevOps Interview Questions & Answers** – your one-stop destination for mastering **DevOps, Cloud, and SRE interviews**! 🚀  
 
-This repository contains **350+ carefully curated interview questions** with detailed answers, covering **all major DevOps tools, cloud platforms, and best practices**. Whether you're a **beginner preparing for your first DevOps job** or an **experienced engineer aiming for top-tier roles**, this resource will help you **understand core concepts, ace technical interviews, and build confidence**.  
+This repository contains **550+ carefully curated interview questions** with detailed answers, covering **all major DevOps tools, cloud platforms, and best practices**. Whether you're a **beginner preparing for your first DevOps job** or an **experienced engineer aiming for top-tier roles**, this resource will help you **understand core concepts, ace technical interviews, and build confidence**.  
 
 We cover:  
 ✅ **DevOps Fundamentals** – CI/CD, Automation, Infrastructure as Code (IaC)  
@@ -17,8 +17,11 @@ We cover:
 ✅ **Networking & Security** – DNS, Load Balancing, SSL, Firewalls  
 ✅ **Scripting & Configuration Management** – Ansible, Terraform, Bash, Python  
 ✅ **DevOps Interview Scenarios & Real-World Problems**  
+✅ **PDFs & Study Docs** – Downloadable guides, cheat sheets & interview prep materials  
 
 > [!IMPORTANT]
+>
+> **📜 New!** Access **PDFs & Docs** for structured learning and quick revision. 🚀
 >
 > Each section is **well-structured** with **questions categorized by difficulty level**:  
 > 🟢 **Beginner** | 🟡 **Intermediate** | 🔴 **Advanced**  
@@ -49,7 +52,7 @@ We cover:
 ✅ **Scripting & Automation**: Bash, Python, YAML, Groovy  
 ✅ **DevOps Best Practices & Real-World Scenarios**  
 
-📜 **Currently, the repository contains over 350+ handpicked DevOps questions!**  
+📜 **Currently, the repository contains over 550+ handpicked DevOps questions!**  
 
 > [!NOTE]
 >
@@ -74,6 +77,7 @@ We have **organized the questions based on DevOps tools and concepts**:
  ├── 📁 best-practices/             # Real-world scenarios & case studies  
  ├── 📁 mock-interviews/            # Mock interview questions and solutions  
  ├── 📁 cheat-sheets/               # Quick reference guides  
+ ├── 📁 docs/                       # Folder for PDFs & Docs 
  ├── 📄 CONTRIBUTING.md             # Contribution guidelines  
  ├── 📄 LICENSE                     # License information  
  └── 📄 README.md                   # Project overview (this file)  
@@ -95,6 +99,7 @@ We have **organized the questions based on DevOps tools and concepts**:
 | **Scripting & Automation**     | `automation-scripting/` | [View Questions](automation-scripting/README.md) |  
 | **Mock Interviews & Scenarios**| `mock-interviews/` | [View Questions](mock-interviews/README.md) |  
 | **Cheat Sheets**               | `cheat-sheets/` | [View Questions](cheat-sheets/README.md) |  
+| **DevOps Interview Q&A PDF**               | `docs/` | [Download](docs/README.md) |
 
 ---
 
@@ -121,7 +126,7 @@ We have **organized the questions based on DevOps tools and concepts**:
 > - Add new questions/answers via **Pull Requests (PRs)**.  
 > - Share real interview experiences in the **Discussions** section.  
 >
-> **🔗 [Jump to the Interview Questions](#📂-topics-covered)**
+> **🔗 [Jump to the Interview Questions](#-quick-access-to-questions)**
 
 ---
 
@@ -149,6 +154,22 @@ We provide **cheat sheets** for quick learning and interview revision:
 📌 **Jenkins & CI/CD Pipeline Examples**  
 
 📌 **[Explore Cheat Sheets](cheat-sheets/README.md)**  
+
+---
+
+### **📝 DevOps Interview PDFs & Docs**  
+
+Looking for **downloadable PDFs** of **DevOps interview questions, cheat sheets, and study guides**? We've got you covered! 🚀  
+
+📂 **What You’ll Find Here:**  
+✔️ **DevOps Interview Questions (PDF Format)** – Download **550+ curated questions** in one file  
+✔️ **Cheat Sheets & Quick References** – Linux, Git, Kubernetes, Docker, Terraform, and more  
+✔️ **Mock Interview Scenarios & Case Studies** – Real-world troubleshooting and hands-on challenges  
+✔️ **Cloud & DevOps Roadmaps** – Step-by-step learning paths for AWS, Azure, GCP, and Kubernetes  
+
+📥 **[Download PDFs & Docs](docs/README.md)**  
+
+📌 **Want to contribute?** If you have useful PDFs, case studies, or additional questions, feel free to **submit a pull request**!
 
 ---
 
