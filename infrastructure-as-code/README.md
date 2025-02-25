@@ -740,6 +740,7 @@ resource "aws_instance" "web" {
 ### **45. What are Terraform `locals` and `output` variables?**  
 
 **Answer:**  
+
 - `locals`: Store **temporary values**  
 - `output`: Expose values after deployment  
 
@@ -775,6 +776,7 @@ main = rule { tfplan.cost_estimate.total_monthly_cost < 500 }
 ### **47. How do you roll back changes in Terraform?**  
 
 **Answer:**  
+
 - **Option 1:** Use version control (`git revert`)  
 - **Option 2:** Manually restore the previous state  
 - **Option 3:** Import last known working state:  
@@ -996,3 +998,30 @@ Example:
 ```sh
 aws cloudformation describe-stack-events --stack-name my-stack
 ```
+
+---
+
+## **📢 Contribute & Stay Updated**  
+
+💡 **Want to contribute?**  
+We **welcome contributions!** If you have insights, new tools, or improvements, feel free to submit a **pull request**.  
+
+📌 **How to Contribute?**
+
+- Read the **[CONTRIBUTING.md](https://github.com/NotHarshhaa/DevOps-Interview-Questions/blob/master/CONTRIBUTING.md)** guide.  
+- Fix errors, add missing topics, or suggest improvements.  
+- Submit a **pull request** with your updates.  
+
+📢 **Stay Updated:**  
+⭐ **Star the repository** to get notified about new updates and additions.  
+💬 **Join discussions** in **[GitHub Issues](https://github.com/NotHarshhaa/DevOps-Interview-Questions/issues)** to suggest improvements.  
+
+---
+
+## **🌍 Community & Support**  
+
+🔗 **GitHub:** [@NotHarshhaa](https://github.com/NotHarshhaa)  
+📝 **Blog:** [ProDevOpsGuy](https://blog.prodevopsguy.xyz)  
+💬 **Telegram Community:** [Join Here](https://t.me/prodevopsguy)  
+
+![Follow Me](https://imgur.com/2j7GSPs.png)
