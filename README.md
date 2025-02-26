@@ -4,6 +4,8 @@
 
 ## 📌 About This Repository  
 
+![about](https://imgur.com/i6dZXRH.png)
+
 Welcome to **DevOps Interview Questions & Answers** – your one-stop destination for mastering **DevOps, Cloud, and SRE interviews**! 🚀  
 
 This repository contains **550+ carefully curated interview questions** with detailed answers, covering **all major DevOps tools, cloud platforms, and best practices**. Whether you're a **beginner preparing for your first DevOps job** or an **experienced engineer aiming for top-tier roles**, this resource will help you **understand core concepts, ace technical interviews, and build confidence**.  
