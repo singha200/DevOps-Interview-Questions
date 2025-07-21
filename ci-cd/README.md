@@ -588,29 +588,1318 @@ To secure CI/CD, follow **these best practices**:
 ✅ **Run Security Scans:** Use **SAST, DAST, and dependency scanning** tools.  
 ✅ **Monitor CI/CD Pipelines:** Detect suspicious activity using **SIEM tools** like Splunk or Datadog.  
 
----
+### **61. What are Jenkins Shared Libraries and how do they work?**
 
-## **📢 Contribute & Stay Updated**  
-
-💡 **Want to contribute?**  
-We **welcome contributions!** If you have insights, new tools, or improvements, feel free to submit a **pull request**.  
-
-📌 **How to Contribute?**
-
-- Read the **[CONTRIBUTING.md](https://github.com/NotHarshhaa/DevOps-Interview-Questions/blob/master/CONTRIBUTING.md)** guide.  
-- Fix errors, add missing topics, or suggest improvements.  
-- Submit a **pull request** with your updates.  
-
-📢 **Stay Updated:**  
-⭐ **Star the repository** to get notified about new updates and additions.  
-💬 **Join discussions** in **[GitHub Issues](https://github.com/NotHarshhaa/DevOps-Interview-Questions/issues)** to suggest improvements.  
+## ✅ Answer  
 
 ---
+Jenkins Shared Libraries allow you to **centralize reusable pipeline code** (like functions, steps, and variables) across multiple pipelines. They promote **code reuse**, **maintainability**, and **consistency** in large Jenkins setups.
 
-## **🌍 Community & Support**  
+### 📘 What is a Jenkins Shared Library?
 
-🔗 **GitHub:** [@NotHarshhaa](https://github.com/NotHarshhaa)  
-📝 **Blog:** [ProDevOpsGuy](https://blog.prodevopsguy.xyz)  
-💬 **Telegram Community:** [Join Here](https://t.me/prodevopsguy)  
+A **Shared Library** is a Git repository (or part of one) that contains reusable Groovy code you can include in Jenkins pipelines using the `@Library` annotation.
 
-![Follow Me](https://imgur.com/2j7GSPs.png)
+It typically includes:
+```
+(root)
+├── vars/
+│   └── sayHello.groovy
+├── src/
+│   └── org/example/MyClass.groovy
+├── resources/
+│   └── templates/config.xml
+└── README.md
+```
+
+---
+
+### 🧠 Why Use Shared Libraries?
+
+- Avoid repeating logic in every Jenkinsfile  
+- Encapsulate business logic, deployment steps, or validation code  
+- Easy updates across all pipelines  
+- Fewer errors and better collaboration  
+
+---
+
+### ⚙️ How Do They Work?
+
+1. **Create a Git repo** with a specific structure (`vars/`, `src/`, etc.).
+2. Configure the library in Jenkins:
+   - Go to **Manage Jenkins → Global Pipeline Libraries**.
+   - Add your library by name and Git URL.
+3. In your Jenkinsfile, you load the library:
+   ```groovy
+   @Library('my-shared-library') _
+   ```
+4. Use global functions or classes defined in `vars/` or `src/`.
+
+---
+
+### 🔍 Example
+
+**vars/sayHello.groovy**
+```groovy
+def call(String name = 'world') {
+    echo "Hello, ${name}!"
+}
+```
+
+**Jenkinsfile**
+```groovy
+@Library('my-shared-library') _
+
+pipeline {
+    agent any
+    stages {
+        stage('Greet') {
+            steps {
+                sayHello('Abhishek')
+            }
+        }
+    }
+}
+```
+
+---
+
+### ✅ Benefits
+
+- DRY (Don’t Repeat Yourself)
+- Cleaner Jenkinsfiles
+- Version-controlled and auditable
+- Easier team collaboration
+
+---
+
+> Summary:  
+> Jenkins Shared Libraries allow you to **modularize and reuse pipeline logic** across projects. They are ideal for **large-scale CI/CD environments** where consistency and maintainability are key.
+
+---
+
+## **62. Talk about 5 build targets that you use on a day-to-day basis in Maven.**
+
+### 📝 Short Explanation  
+Maven uses **build lifecycle phases** (also called build targets) to automate project compilation, packaging, testing, and deployment. These phases are executed using `mvn <goal>` commands.
+
+## ✅ Answer  
+
+Here are 5 Maven build targets I commonly use in my day-to-day workflow:
+
+---
+
+### 1. `mvn clean`
+- **Purpose:** Deletes the `target/` directory to ensure a clean slate before a new build.
+- **When I use it:** Before any fresh build to avoid conflicts from previous build artifacts.
+
+---
+
+### 2. `mvn compile`
+- **Purpose:** Compiles the source code in the `src/main/java` directory.
+- **When I use it:** To verify that there are no compilation issues before moving to packaging.
+
+---
+
+### 3. `mvn test`
+- **Purpose:** Runs unit tests using a testing framework like JUnit or TestNG.
+- **When I use it:** Regularly during development or in CI pipelines to ensure code stability.
+
+---
+
+### 4. `mvn package`
+- **Purpose:** Packages the compiled code into a distributable format like a `.jar` or `.war`.
+- **When I use it:** When the build is stable and I need to generate an artifact.
+
+---
+
+### 5. `mvn install`
+- **Purpose:** Installs the built artifact into the **local Maven repository** (`~/.m2/repository`) so it can be used by other local projects.
+- **When I use it:** When I’m developing shared libraries or modules that are reused by other internal projects.
+
+---
+
+> Summary:  
+> The most frequently used Maven targets in my daily work include: `clean`, `compile`, `test`, `package`, and `install`. They ensure a complete and reliable build pipeline from development to artifact distribution.
+
+---
+
+### **63. Which artifact repository do you use for builds?
+
+## ✅ Answer  
+An artifact repository is a storage system where you can **publish**, **store**, and **retrieve** build artifacts like `.jar`, `.war`, Docker images, etc. It’s crucial in modern CI/CD pipelines for dependency management and versioning.
+In our organization, we use **JFrog Artifactory** as our primary artifact repository for builds.
+
+---
+
+### 📘 Why JFrog Artifactory?
+
+- **Supports multiple package formats** (Maven, npm, Docker, PyPI, Helm, etc.)
+- **Integration with Jenkins & GitHub Actions** for publishing artifacts during CI/CD.
+- **Proxying public repositories** like Maven Central or Docker Hub to improve speed and reliability.
+- **Access control and security** via RBAC for different teams and projects.
+- **Retention policies** to clean up outdated builds automatically.
+
+---
+
+### 🔄 Typical Workflow
+
+1. Developer commits code to GitHub.
+2. Jenkins triggers a build and packages the application using Maven.
+3. The artifact is pushed to Artifactory using `mvn deploy`.
+4. Later stages (like deployment) pull the artifact from Artifactory.
+
+---
+
+### 🧠 Alternatives I've worked with:
+- **Sonatype Nexus Repository** – Lightweight and easy to set up for Maven-only use cases.
+- **AWS CodeArtifact** – Great for AWS-native environments.
+- **GitHub Packages** – Useful for open-source projects or tight GitHub integrations.
+
+---
+
+> Summary:  
+> My go-to artifact repository is **JFrog Artifactory** due to its versatility, wide ecosystem support, and strong integration with CI/CD pipelines.
+
+---
+
+### **64. How do you handle secrets in CI/CD pipelines?**
+### 📝 Short Explanation
+Handling secrets in CI/CD pipelines is crucial for security. Secrets include API keys, database passwords, and other sensitive information that should not be hardcoded in the codebase or exposed in logs.
+## ✅ Answer
+Here are some best practices for managing secrets in CI/CD pipelines:
+1. **Use Environment Variables**  
+   - Store secrets as environment variables in the CI/CD tool (e.g., GitHub Secrets, GitLab CI/CD Variables).
+   - Access them in your pipeline scripts without hardcoding.
+    - Example in GitHub Actions:
+    ```yaml
+    env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    ```
+2. **Secrets Management Tools**  
+   - Use dedicated tools like **HashiCorp Vault**, **AWS Secrets Manager**, or **Azure Key Vault** to store and manage secrets securely.
+   - Integrate these tools with your CI/CD pipeline to fetch secrets dynamically.
+   - Example using AWS Secrets Manager in a script:
+    ```bash
+    DB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id my-db-secret --query SecretString --output text)
+    ```
+3. **Encryption**  
+   - Encrypt sensitive files or configuration data before committing them to the repository.
+   - Use tools like **GPG** or built-in encryption features of CI/CD tools.
+   - Example using GPG:
+    ```bash
+    gpg --symmetric --cipher-algo AES256 my-secret-file.txt
+    ```
+4. **Access Control** 
+   - Implement **Role-Based Access Control (RBAC)** to restrict who can access and modify secrets.
+   - Ensure only authorized users and services can access sensitive information.
+5. **Audit and Monitoring**  
+   - Regularly audit access to secrets and monitor for unauthorized access attempts.
+   - Use logging and alerting to detect suspicious activities.
+6. **Avoid Hardcoding Secrets**  
+   - Never hardcode secrets directly in the codebase or configuration files.
+   - Use placeholders or environment variables instead. 
+- Example:
+    ```yaml
+    # Bad practice
+    db_password: "my-secret-password" 
+    # Good practice
+    db_password: "${DB_PASSWORD}"
+    ``` 
+7. **Rotate Secrets Regularly**  
+   - Implement a process to rotate secrets periodically to minimize the risk of exposure.
+   - Use automation to update secrets in the CI/CD pipeline without downtime.
+8. **Use Secret Scanning Tools**  
+   - Integrate secret scanning tools like **GitGuardian** or **TruffleHog** to detect accidentally committed secrets in the codebase.
+   - Set up alerts for any detected secrets to take immediate action.
+---
+
+### **65. Which artifact repository do you use for builds?**
+
+### 📝 Short Explanation  
+An artifact repository is a storage system where you can **publish**, **store**, and **retrieve** build artifacts like `.jar`, `.war`, Docker images, etc. It’s crucial in modern CI/CD pipelines for dependency management and versioning.
+
+## ✅ Answer  
+
+In our organization, we use **JFrog Artifactory** as our primary artifact repository for builds.
+
+---
+
+### 📘 Why JFrog Artifactory?
+
+- **Supports multiple package formats** (Maven, npm, Docker, PyPI, Helm, etc.)
+- **Integration with Jenkins & GitHub Actions** for publishing artifacts during CI/CD.
+- **Proxying public repositories** like Maven Central or Docker Hub to improve speed and reliability.
+- **Access control and security** via RBAC for different teams and projects.
+- **Retention policies** to clean up outdated builds automatically.
+
+---
+
+### 🔄 Typical Workflow
+
+1. Developer commits code to GitHub.
+2. Jenkins triggers a build and packages the application using Maven.
+3. The artifact is pushed to Artifactory using `mvn deploy`.
+4. Later stages (like deployment) pull the artifact from Artifactory.
+
+---
+
+### 🧠 Alternatives I've worked with:
+- **Sonatype Nexus Repository** – Lightweight and easy to set up for Maven-only use cases.
+- **AWS CodeArtifact** – Great for AWS-native environments.
+- **GitHub Packages** – Useful for open-source projects or tight GitHub integrations.
+
+---
+
+> Summary:  
+> My go-to artifact repository is **JFrog Artifactory** due to its versatility, wide ecosystem support, and strong integration with CI/CD pipelines.
+
+---
+
+### **66. CI Pipeline Succeeds but App is Broken in Prod — What Action Will You Take?**
+
+## ✅ Answer  
+
+I treat this as a **critical incident** and approach it using a mix of **debugging**, **rollbacks**, and **preventive actions** for the future.
+If the CI/CD pipeline passes but the application breaks in production, it suggests that something is **missing in the validation phase**, or there are **environment mismatches** between staging/CI and production.
+---
+
+### 🔍 Step-by-Step Troubleshooting Approach
+
+#### 1. 🔥 **Initiate Incident Response**
+- Notify the team. Document the issue.
+- If user-facing and severe, consider triggering an **automated rollback** or **manual redeploy of the last working version**.
+
+#### 2. 🧪 **Check Prod Logs and Monitoring**
+- View logs using ELK, CloudWatch, or your observability stack.
+- Check:
+  - HTTP status codes (500s, 4xx)
+  - Application logs
+  - Metrics: memory, CPU, DB errors, timeouts
+
+#### 3. 🔁 **Compare Staging and Production**
+- Is staging missing any:
+  - Environment variables?
+  - Backend services?
+  - Feature flags?
+- Confirm the **artifact promoted to prod** is the same tested in staging.
+
+#### 4. 🔐 **Check Secrets and External Integrations**
+- API keys, third-party integrations, database credentials — misconfigured or rotated tokens can break production unexpectedly.
+
+#### 5. 🧾 **Check Infrastructure Differences**
+- Is production using a different:
+  - Kubernetes namespace?
+  - Load balancer config?
+  - Terraform state?
+- Sometimes prod has older AMIs, different volumes, or a custom security group.
+
+---
+
+### ✅ Immediate Actions
+
+- **Rollback if feasible** (using Git tags, Helm chart versions, AMI snapshots).
+- **Create a postmortem** entry and assign root cause analysis (RCA).
+- **Patch with hotfix** only after RCA is complete.
+
+---
+
+### 🛠️ Preventive Measures Going Forward
+
+- Add **automated smoke tests** after deployment.
+- Integrate **canary releases** or **blue-green deployments**.
+- Enforce staging and production **parity** in environments.
+- Validate secrets and config before each deployment.
+- Enable alerting for anomalies immediately after deployment.
+
+---
+
+### 🧠 Real-World Example
+
+After a successful CI build and deployment, the app was broken in prod because a staging-only environment variable (`USE_MOCK_SERVICE=true`) was hardcoded and not overridden in production.
+
+🔧 Fix: Added proper `values-prod.yaml` for Helm, separated environments clearly, and added smoke tests post-deploy.
+
+---
+
+> Summary:  
+> A CI pipeline success doesn’t always guarantee production stability. I validate logs, environment parity, secrets, and roll back if needed. Going forward, I strengthen post-deploy checks and staging fidelity.
+
+---
+
+### **67. Pipeline Slows Down Over Time (Builds taking more time) — How Will You Fix?**
+
+## ✅ Answer  
+If a CI pipeline is progressively getting slower, it's likely due to **accumulated build artifacts**, **unoptimized steps**, **lack of caching**, or **resource saturation** on the runner/agent.
+When I notice that builds are getting slower over time, I take a **metrics-driven approach** to isolate the slowdown and optimize the pipeline stages.
+
+---
+
+### 🧭 Step-by-Step Troubleshooting Approach
+
+#### 1. 📊 **Measure Stage Durations Over Time**
+- Use CI tool metrics (Jenkins, GitHub Actions, GitLab) or integrate Prometheus/Grafana.
+- Identify **which stage(s)** are consuming more time — code checkout, dependency resolution, test execution, build packaging, etc.
+
+---
+
+#### 2. 📦 **Check Dependency Management**
+- Over time, dependency trees can grow.
+- Use tools like:
+  - `mvn dependency:analyze`
+  - `npm prune`
+- Cache dependencies (e.g., `~/.m2`, `node_modules`) between runs to avoid full re-downloads.
+
+---
+
+#### 3. 💾 **Enable Layered and Incremental Builds**
+- Avoid cleaning entire workspace unless necessary (`mvn clean install` can be expensive).
+- Use incremental build options:
+  - Gradle: `--build-cache`
+  - Bazel: native caching
+  - Docker: use layers wisely and avoid invalidating cache
+
+---
+
+#### 4. 🧼 **Clean Up Disk and Workspace**
+- Runners may accumulate:
+  - Gigabytes of build artifacts
+  - Old Docker images and volumes
+- Use scheduled jobs or add cleanup logic:
+  ```bash
+  docker system prune -af
+  ```
+
+---
+
+#### 5. 🚀 **Use Parallelism and Matrix Builds**
+- Split long test suites or build steps using:
+  - `strategy.matrix` in GitHub Actions
+  - `parallel` stages in Jenkins pipelines
+
+---
+
+#### 6. ⚙️ **Review Runner/Agent Resource Utilization**
+- Check CPU, memory, disk I/O on build agents.
+- Use autoscaling runners or move to faster instance types if needed.
+
+---
+
+### 🧠 Real-World Example
+
+We noticed our build time increased from 7 to 19 minutes over 6 months.  
+Root cause:  
+- Increased number of tests without parallel execution  
+- Outdated Docker layers not using cache  
+
+✅ Fixes implemented:
+- Introduced parallel test stages  
+- Refactored Dockerfile to leverage cache better  
+- Cleaned up unused images on runners weekly  
+
+---
+
+> Summary:  
+> When a pipeline slows down, I:
+> - Measure and isolate the slowdown  
+> - Optimize dependencies and builds  
+> - Use caching and parallelism  
+> - Clean up workspace and review resource usage
+
+---
+
+### **68. A developer pushes a feature branch, but the pipeline doesn’t trigger in GitHub Actions. What could be wrong?**
+
+## ✅ Answer  
+If a GitHub Actions pipeline doesn’t trigger when a branch is pushed, it's usually due to **misconfigured trigger rules**, **file path filters**, or **workflow scope issues**.
+When this happens, I check the following areas step-by-step to isolate and fix the issue.
+
+---
+
+### 🧭 Step-by-Step Troubleshooting
+
+#### 1. 🔍 **Check the `on:` Section in the Workflow**
+- GitHub Actions triggers are defined under the `on:` field. Make sure it includes `push` and relevant branches.
+
+**Example of incorrect config (only main branch will trigger):**
+```yaml
+on:
+  push:
+    branches:
+      - main
+```
+
+**Fix: include `feature/*` pattern or all branches:**
+```yaml
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+      - 'dev'
+```
+
+---
+
+#### 2. 📁 **Check `paths` Filter (if used)**
+If the workflow has a `paths:` filter, it will only trigger if specific files are changed.
+
+```yaml
+on:
+  push:
+    paths:
+      - 'src/**'
+```
+
+If a developer changed a file outside the listed paths, the pipeline won’t trigger.
+
+---
+
+#### 3. 🧪 **Check if the Workflow File is on Default Branch**
+- Workflows stored in `.github/workflows/` must exist on the **default branch** (usually `main`) to trigger from other branches.
+
+If the workflow file was only added in the `feature/xyz` branch, it won’t trigger on push unless merged to the main branch.
+
+---
+
+#### 4. 🔒 **Check Branch Protection or Permissions**
+- If GitHub Actions is disabled for the repo or workflow permissions are restricted (`Settings → Actions → General`), it may block pipeline execution.
+
+---
+
+#### 5. 🧼 **Verify `.github/workflows/*.yml` File Validity**
+- Run `act` locally or use the **GitHub Actions → Logs** to check for YAML syntax errors.
+- A broken workflow file might silently fail to register triggers.
+
+---
+
+### 🧠 Real-World Fix
+
+A developer pushed to `feature/payment-refactor`, but the workflow didn’t run.  
+We found that:
+- The `on.push.branches` section only had `main` and `develop`.
+- After updating it to include `'feature/*'`, it started working as expected.
+
+---
+
+> Summary:  
+> If GitHub Actions doesn’t trigger on feature branch push:
+> - Check `on.push.branches` config
+> - Ensure no blocking `paths:` filter
+> - Confirm workflow file exists on default branch
+> - Validate repo settings and workflow file syntax
+
+---
+
+### **69. Your build fails because it can’t download a dependency from your artifact repository. What will you do?**
+
+## ✅ Answer  
+A failed dependency download usually indicates an issue with **repository configuration**, **authentication**, **connectivity**, or **artifact availability**.
+When a build fails to fetch a dependency from an artifact repo (e.g., Artifactory, Nexus, AWS CodeArtifact), I debug it systematically.
+
+---
+
+### 🧭 Step-by-Step Troubleshooting
+
+#### 1. 🔍 **Check the Build Error Message**
+- Identify the exact dependency and which repo URL it tried to hit.
+- Note if it’s a `401 Unauthorized`, `403 Forbidden`, `404 Not Found`, or a timeout.
+
+---
+
+#### 2. 🗂️ **Verify Repository Configuration**
+- Check your `pom.xml`, `build.gradle`, or `.npmrc` to ensure the **repository URL is correct**.
+
+✅ For Maven:
+```xml
+<repository>
+  <id>company-repo</id>
+  <url>https://artifactory.example.com/artifactory/libs-release</url>
+</repository>
+```
+
+---
+
+#### 3. 🔐 **Check Credentials**
+- Verify credentials in `~/.m2/settings.xml` or environment variables are correct and not expired.
+
+✅ Sample settings.xml:
+```xml
+<server>
+  <id>company-repo</id>
+  <username>${env.ARTIFACT_USER}</username>
+  <password>${env.ARTIFACT_PASS}</password>
+</server>
+```
+
+> Tip: Some tokens (e.g., AWS CodeArtifact) expire and need to be refreshed via CLI.
+
+---
+
+#### 4. 🌐 **Test Repo Connectivity**
+- Manually curl the artifact URL to check if it is reachable:
+```bash
+curl -I https://artifactory.example.com/artifactory/libs-release/...
+```
+
+- Check for proxy/firewall/DNS issues especially in CI environments.
+
+---
+
+#### 5. 📦 **Check If the Artifact Exists**
+- Log into the artifact repository UI and confirm:
+  - The artifact version exists
+  - The repository hasn’t been deleted or archived
+
+---
+
+#### 6. 🛠️ **Try a Local Build with Clean Cache**
+- Delete local repo cache and try again:
+```bash
+rm -rf ~/.m2/repository/<group>/<artifact>
+mvn clean install
+```
+
+---
+
+### 🧠 Real-World Example
+
+We once faced this with `mvn install` failing in Jenkins.  
+Reason: The **CodeArtifact token had expired**, but Jenkins was still using the old token via environment variable.
+
+✅ Fix:  
+- Added a step in Jenkinsfile to refresh the token before the build:
+```bash
+aws codeartifact get-authorization-token ...
+```
+
+---
+
+> Summary:  
+> When a build fails due to missing dependencies, I:
+> - Check error logs and repo URL
+> - Validate credentials and token freshness
+> - Confirm repo and artifact existence
+> - Test connectivity manually
+> - Clean local cache and retry
+
+---
+
+### **70. Python Build Fails on CI But Works Locally — What Can Be the Issue?**
+
+## ✅ Answer  
+This typically happens due to **differences in environment**, **missing dependencies**, **version mismatches**, or **missing credentials** between your local machine and the CI environment.
+
+I systematically compare the local and CI environments and address issues related to Python version, packages, permissions, and environment variables.
+
+---
+
+### 🧭 Step-by-Step Troubleshooting
+
+#### 1. 🐍 **Check Python Version**
+- Your local machine might use Python 3.11, but the CI runner may default to Python 3.6.
+```bash
+python --version
+```
+✅ Fix: Pin the Python version in your CI configuration (e.g., in GitHub Actions):
+```yaml
+- uses: actions/setup-python@v4
+  with:
+    python-version: '3.10'
+```
+
+---
+
+#### 2. 📦 **Check Dependency Installation**
+- Make sure you're installing dependencies from a `requirements.txt` or `pyproject.toml`.
+- If CI doesn't install dependencies or installs different ones due to version pinning, the build may fail.
+
+✅ Fix:
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+#### 3. 📁 **Check Missing Files/Modules**
+- CI systems start from a clean environment. Ensure all required files (e.g., `.env`, `config.yaml`, local modules) are **checked into Git** or provided securely.
+
+---
+
+#### 4. 🔐 **Check for Missing Secrets**
+- Locally, your credentials (e.g., AWS, database) might be stored in `.env`, but CI needs them as **environment variables** or **secret manager injections**.
+
+✅ Fix in GitHub Actions:
+```yaml
+env:
+  API_KEY: ${{ secrets.API_KEY }}
+```
+
+---
+
+#### 5. 🧪 **Run Tests Verbosely**
+- In CI, run tests with verbose output:
+```bash
+pytest -v
+```
+- It helps pinpoint the exact failure, such as ImportError, ModuleNotFound, or permission issues.
+
+---
+
+#### 6. 📦 **Check for C Extension Issues**
+- Some Python packages require system-level dependencies (e.g., `psycopg2`, `lxml`).
+- These might be installed on your machine, but not available in the CI container.
+
+✅ Fix: Add dependencies via `apt` before pip install:
+```bash
+sudo apt-get install -y libpq-dev
+pip install psycopg2
+```
+
+---
+
+### 🧠 Real-World Example
+
+A Flask app was building fine locally but failed in GitHub Actions CI.  
+Reason: The app used `python-dotenv`, but `.env` file was not available in CI, and environment variables were not set.
+
+✅ Fix:
+- Added secrets in GitHub → Repository Settings → Secrets
+- Injected them in the pipeline using `env:`
+
+---
+
+> Summary:  
+> When a Python build fails in CI but works locally,
+> - Check version differences  
+> - Validate dependency installation  
+> - Ensure all required files and env vars are available  
+> - Review system-level dependencies and module paths
+
+---
+
+### **71. Explain the Python Application Build Process in Detail.**
+
+## ✅ Answer  
+Unlike compiled languages, Python applications don’t go through a heavy compile step. However, building a Python app still involves packaging, dependency resolution, and distribution steps that are critical for CI/CD and production deployment.
+The Python build process includes:
+
+1. Organizing the project structure  
+2. Managing dependencies  
+3. Compiling to bytecode (optional)  
+4. Creating distributable artifacts (wheel/sdist)  
+5. Publishing the package (optional)
+
+---
+
+### 🧭 Detailed Python Build Process
+
+#### 1. 🗂️ **Organize the Project Structure**
+A good Python project starts with this structure:
+```
+myapp/
+│
+├── myapp/              # Application source code
+│   └── __init__.py
+├── tests/              # Unit tests
+├── pyproject.toml      # Modern metadata and build system
+├── requirements.txt    # Dependency list (optional)
+└── README.md
+```
+
+---
+
+#### 2. 📦 **Declare Dependencies**
+- Use `requirements.txt` or `pyproject.toml` to declare dependencies.
+- These are installed using `pip install`:
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+#### 3. 🛠️ **Build the Package**
+Python uses tools like `setuptools` and `build` to package apps.
+
+✅ Steps:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install build
+python -m build
+```
+
+📦 This generates:
+- `dist/myapp-0.1.0.tar.gz` (source distribution)
+- `dist/myapp-0.1.0-py3-none-any.whl` (wheel binary)
+
+---
+
+#### 4. 🧪 **Run Unit Tests**
+Use `pytest`, `unittest`, or another test framework to ensure code quality:
+```bash
+pytest tests/
+```
+
+---
+
+#### 5. 🚀 **Distribute or Deploy**
+- **Distribute via PyPI (optional):**
+```bash
+pip install twine
+twine upload dist/*
+```
+
+- **Deploy manually or via CI/CD:**  
+Package can be deployed into containers, virtual machines, or directly to PaaS like AWS Lambda, Google Cloud Run, etc.
+
+---
+
+### 🧠 Real-World Example
+
+For a Flask-based API project:
+- We declared dependencies in `requirements.txt`
+- Created a `pyproject.toml` for packaging metadata
+- Ran `python -m build` in CI to produce a wheel
+- Built a Docker image with the wheel inside
+- Deployed it to Kubernetes using Helm
+
+---
+
+> Summary:  
+> The Python build process involves organizing code, managing dependencies, building wheels/sdists, and optionally publishing to PyPI or packaging into Docker images. Even though Python is interpreted, structured builds help automate testing and deployment at scale.
+
+---
+
+### **72. Using Static Code Analysis, what kind of problems can you identify?**
+
+## ✅ Answer  
+Static code analysis helps detect issues in the source code **without executing it**. It's an early gate in the CI/CD pipeline to catch bugs, code smells, and violations of coding standards.
+
+Static code analysis tools can identify a wide range of issues, including:
+
+---
+
+### 🔍 Types of Problems Identified by Static Analysis
+
+#### 1. 🧠 **Syntax Errors and Language Misuse**
+- Invalid syntax or misuse of language constructs.
+- Missing imports, undeclared variables, etc.
+```python
+def test():
+    print(x)   # x not defined
+```
+
+#### 2. 📏 **Coding Standard Violations**
+- Violations of PEP8 in Python, PSR-12 in PHP, or Google's Java Style Guide.
+- Examples:
+  - Too long lines
+  - Improper indentation
+  - Poor variable naming
+
+Tools: `pylint`, `flake8`, `checkstyle`, `eslint`
+
+---
+
+#### 3. 🔁 **Code Complexity and Maintainability**
+- Detects overly complex functions or nested logic.
+- Warns about:
+  - Deep nesting
+  - Too many return points
+  - Long methods or files
+
+Tool: `radon`, `sonarqube`, `jshint`
+
+---
+
+#### 4. 🔐 **Security Vulnerabilities**
+- Identifies hardcoded credentials, SQL injection risks, unsanitized inputs.
+```python
+query = "SELECT * FROM users WHERE id = " + user_input  # SQL Injection
+```
+
+Tools: `bandit` (Python), `Brakeman` (Ruby), `semgrep`
+
+---
+
+#### 5. 🧼 **Dead Code and Unused Variables**
+- Finds unused imports, unreachable code, and variables that are never referenced.
+```python
+import json  # unused
+```
+
+---
+
+#### 6. 🧪 **Incorrect Type Usage**
+- Type mismatches or violations in statically typed languages.
+- Tools like `mypy` for Python can even help with dynamic type checking.
+
+---
+
+#### 7. 🧯 **Common Bugs and Anti-Patterns**
+- Examples:
+  - Using `==` instead of `===` in JavaScript
+  - Assigning instead of comparing (`=` vs `==`)
+  - Resource leaks (e.g., open file not closed)
+
+---
+
+#### 8. 🔁 **Duplicate Code**
+- Highlights copy-pasted blocks which violate DRY (Don’t Repeat Yourself) principle.
+
+Tool: `SonarQube`, `PMD`, `jscpd`
+
+---
+
+### 🧠 Real-World Example
+
+In one of our Python projects:
+- `bandit` detected a hardcoded AWS access key in a config file.
+- `flake8` flagged missing docstrings and complex nested loops.
+- `SonarQube` highlighted duplicated logic in two different modules.
+
+These issues were caught **before** they were deployed to staging, saving time and preventing technical debt.
+
+---
+
+> Summary:  
+> Static code analysis helps identify bugs, security risks, code smells, and style issues early in the development cycle. It boosts code quality, maintainability, and security without running the application.
+
+---
+
+### **73. Using Static Code Analysis, what kind of problems can you identify?**
+
+## ✅ Answer  
+Static code analysis helps detect issues in the source code **without executing it**. It's an early gate in the CI/CD pipeline to catch bugs, code smells, and violations of coding standards.
+Static code analysis tools can identify a wide range of issues, including:
+
+---
+
+### 🔍 Types of Problems Identified by Static Analysis
+
+#### 1. 🧠 **Syntax Errors and Language Misuse**
+- Invalid syntax or misuse of language constructs.
+- Missing imports, undeclared variables, etc.
+```python
+def test():
+    print(x)   # x not defined
+```
+
+#### 2. 📏 **Coding Standard Violations**
+- Violations of PEP8 in Python, PSR-12 in PHP, or Google's Java Style Guide.
+- Examples:
+  - Too long lines
+  - Improper indentation
+  - Poor variable naming
+
+Tools: `pylint`, `flake8`, `checkstyle`, `eslint`
+
+---
+
+#### 3. 🔁 **Code Complexity and Maintainability**
+- Detects overly complex functions or nested logic.
+- Warns about:
+  - Deep nesting
+  - Too many return points
+  - Long methods or files
+
+Tool: `radon`, `sonarqube`, `jshint`
+
+---
+
+#### 4. 🔐 **Security Vulnerabilities**
+- Identifies hardcoded credentials, SQL injection risks, unsanitized inputs.
+```python
+query = "SELECT * FROM users WHERE id = " + user_input  # SQL Injection
+```
+
+Tools: `bandit` (Python), `Brakeman` (Ruby), `semgrep`
+
+---
+
+#### 5. 🧼 **Dead Code and Unused Variables**
+- Finds unused imports, unreachable code, and variables that are never referenced.
+```python
+import json  # unused
+```
+
+---
+
+#### 6. 🧪 **Incorrect Type Usage**
+- Type mismatches or violations in statically typed languages.
+- Tools like `mypy` for Python can even help with dynamic type checking.
+
+---
+
+#### 7. 🧯 **Common Bugs and Anti-Patterns**
+- Examples:
+  - Using `==` instead of `===` in JavaScript
+  - Assigning instead of comparing (`=` vs `==`)
+  - Resource leaks (e.g., open file not closed)
+
+---
+
+#### 8. 🔁 **Duplicate Code**
+- Highlights copy-pasted blocks which violate DRY (Don’t Repeat Yourself) principle.
+
+Tool: `SonarQube`, `PMD`, `jscpd`
+
+---
+
+### 🧠 Real-World Example
+
+In one of our Python projects:
+- `bandit` detected a hardcoded AWS access key in a config file.
+- `flake8` flagged missing docstrings and complex nested loops.
+- `SonarQube` highlighted duplicated logic in two different modules.
+
+These issues were caught **before** they were deployed to staging, saving time and preventing technical debt.
+
+---
+
+> Summary:  
+> Static code analysis helps identify bugs, security risks, code smells, and style issues early in the development cycle. It boosts code quality, maintainability, and security without running the application.
+
+---
+
+### **74. Static Code Analysis Slows Down CI Pipeline — How Will You Fix It?**
+
+## ✅ Answer  
+When static code analysis becomes a bottleneck in the CI pipeline, the key is to **optimize its execution** by limiting scope, parallelizing checks, or moving analysis to asynchronous or pre-merge steps.
+
+If static analysis is slowing down the pipeline, I take the following steps to improve performance **without sacrificing code quality**.
+
+---
+
+### 🧭 Step-by-Step Optimization Strategy
+
+#### 1. 🔄 **Run Analysis Only on Changed Files**
+Instead of scanning the whole codebase, restrict analysis to recently modified files:
+```bash
+git diff --name-only origin/main...HEAD | grep '\.py$' | xargs pylint
+```
+
+> ✅ Benefit: Cuts analysis time drastically, especially in large monorepos.
+
+---
+
+#### 2. 🧵 **Run Analysis in Parallel**
+Use tools or flags that support multi-threaded/static checks:
+```bash
+flake8 --jobs=4
+eslint . --max-warnings=0 --parallel
+```
+
+Or split checks across CI matrix jobs in GitHub Actions:
+```yaml
+strategy:
+  matrix:
+    part: [backend, frontend]
+```
+
+---
+
+#### 3. 🕒 **Shift Left: Run Analysis Pre-CI**
+Enforce basic static checks via pre-commit hooks so developers catch issues before pushing:
+```bash
+pre-commit install
+```
+
+✅ Tools: `pre-commit`, `husky`, `lint-staged`
+
+---
+
+#### 4. 🧪 **Run Heavy Checks on a Schedule**
+- Keep quick linting in PR builds.
+- Offload deeper security scans (e.g., `bandit`, `semgrep`) to scheduled workflows (daily or nightly).
+
+```yaml
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Runs at 2 AM UTC
+```
+
+---
+
+#### 5. 🎯 **Tune Rules and Severity**
+- Avoid enabling all rules by default.
+- Focus on **high-impact rules** (security, correctness) in CI.
+- Move **style-based** checks to a lower-priority job or local checks.
+
+---
+
+#### 6. 📦 **Cache Tool Dependencies**
+- Caching virtualenvs, node_modules, or pip wheels prevents repeated installations:
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: ~/.cache/pip
+    key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+```
+
+---
+
+### 🧠 Real-World Example
+
+In one repo, `pylint` checks across the monorepo were taking 4–5 minutes per build.
+
+✅ Fixes applied:
+- Limited to `git diff` changes
+- Split frontend/backend linters into separate jobs
+- Added pre-commit hooks for basic checks
+
+**Result:** Pipeline time reduced by ~70% without removing static checks.
+
+---
+
+> Summary:  
+> When static analysis slows down the pipeline:
+> - Run checks only on changed files  
+> - Use parallel jobs  
+> - Offload heavy scans to scheduled builds  
+> - Use pre-commit hooks to shift checks earlier  
+> - Tune rule sets and cache dependencies
+
+---
+
+### **75. App in ‘OutOfSync’ State in Argo CD, But No Git Changes — What Could Be the Reason?**
+
+## ✅ Answer  
+In Argo CD, an application may show as **OutOfSync** even when Git hasn't changed, because the **live Kubernetes state differs from the desired Git state**.
+
+This typically happens when **someone manually modified resources** in the cluster, or when **non-Git-managed changes** occur (e.g., automatic scaling or label updates).
+
+---
+
+### 🧭 Common Reasons and How to Fix Them
+
+#### 1. 👨‍🔧 **Manual Changes in the Cluster**
+Someone edited a deployment, config map, or secret directly using `kubectl edit`, `kubectl patch`, or via another tool (like Helm or the Kubernetes Dashboard).
+
+✅ Fix:  
+Revert manual changes by syncing the app via Argo CD:
+```bash
+argocd app sync <app-name>
+```
+
+---
+
+#### 2. 🔄 **Dynamic Changes Not Tracked in Git**
+Some fields (like annotations, replica counts via HPA) may change at runtime and cause drift.
+
+✅ Options:
+- Use `ignoreDifferences` in `Application` manifest to exclude these fields:
+```yaml
+spec:
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
+```
+
+---
+
+#### 3. 🪵 **Secrets Automatically Rotated**
+If you're using tools like **Sealed Secrets**, **External Secrets**, or **Vault Agent Injector**, secrets might rotate or mutate at runtime.
+
+✅ Fix:  
+- Use `ignoreDifferences` for secret fields
+- Or exclude secrets from Argo CD sync tracking
+
+---
+
+#### 4. ⏱️ **Argo CD Sync Window Missed**
+If auto-sync is enabled but sync windows (time-based restrictions) are defined, changes might not be applied even if detected.
+
+✅ Fix:
+- Check for sync windows in Argo CD settings or annotations
+- Trigger manual sync if needed
+
+---
+
+#### 5. 🔀 **CRDs or Hooks Trigger Drift**
+If a Helm release contains post-install hooks or CRDs that modify resources post-sync, drift may be detected.
+
+✅ Fix:
+- Ensure generated resources are tracked properly
+- Use Helm’s `skipHooks: true` if safe to ignore
+
+---
+
+### 🧠 Real-World Example
+
+We had an application stuck in `OutOfSync` even though there were no Git changes.  
+Root cause: A DevOps engineer had manually increased replica count on the Deployment to test scaling.
+
+✅ Resolution:
+- Re-synced the app from Argo CD to restore Git-desired state.
+- Added `ignoreDifferences` to skip replica count drift in future.
+
+---
+
+> Summary:  
+> Argo CD marks an app `OutOfSync` when the live state in the cluster doesn’t match Git — not just when Git changes.  
+> Manual changes, runtime drift, or auto-generated mutations can cause this, and can be fixed with sync or exclusions.
+
+---
+
+### **76. App in ‘OutOfSync’ State in Argo CD, But No Git Changes — What Could Be the Reason?**
+
+## ✅ Answer  
+In Argo CD, an application may show as **OutOfSync** even when Git hasn't changed, because the **live Kubernetes state differs from the desired Git state**.
+This typically happens when **someone manually modified resources** in the cluster, or when **non-Git-managed changes** occur (e.g., automatic scaling or label updates).
+
+---
+
+### 🧭 Common Reasons and How to Fix Them
+
+#### 1. 👨‍🔧 **Manual Changes in the Cluster**
+Someone edited a deployment, config map, or secret directly using `kubectl edit`, `kubectl patch`, or via another tool (like Helm or the Kubernetes Dashboard).
+
+✅ Fix:  
+Revert manual changes by syncing the app via Argo CD:
+```bash
+argocd app sync <app-name>
+```
+
+---
+
+#### 2. 🔄 **Dynamic Changes Not Tracked in Git**
+Some fields (like annotations, replica counts via HPA) may change at runtime and cause drift.
+
+✅ Options:
+- Use `ignoreDifferences` in `Application` manifest to exclude these fields:
+```yaml
+spec:
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
+```
+
+---
+
+#### 3. 🪵 **Secrets Automatically Rotated**
+If you're using tools like **Sealed Secrets**, **External Secrets**, or **Vault Agent Injector**, secrets might rotate or mutate at runtime.
+
+✅ Fix:  
+- Use `ignoreDifferences` for secret fields
+- Or exclude secrets from Argo CD sync tracking
+
+---
+
+#### 4. ⏱️ **Argo CD Sync Window Missed**
+If auto-sync is enabled but sync windows (time-based restrictions) are defined, changes might not be applied even if detected.
+
+✅ Fix:
+- Check for sync windows in Argo CD settings or annotations
+- Trigger manual sync if needed
+
+---
+
+#### 5. 🔀 **CRDs or Hooks Trigger Drift**
+If a Helm release contains post-install hooks or CRDs that modify resources post-sync, drift may be detected.
+
+✅ Fix:
+- Ensure generated resources are tracked properly
+- Use Helm’s `skipHooks: true` if safe to ignore
+
+---
+
+### 🧠 Real-World Example
+
+We had an application stuck in `OutOfSync` even though there were no Git changes.  
+Root cause: A DevOps engineer had manually increased replica count on the Deployment to test scaling.
+
+✅ Resolution:
+- Re-synced the app from Argo CD to restore Git-desired state.
+- Added `ignoreDifferences` to skip replica count drift in future.
+
+---
+
+> Summary:  
+> Argo CD marks an app `OutOfSync` when the live state in the cluster doesn’t match Git — not just when Git changes.  
+> Manual changes, runtime drift, or auto-generated mutations can cause this, and can be fixed with sync or exclusions.
+> For argo auto-sync to work, ensure self-healing is enabled and the app is configured to auto-sync on changes.
+
+---
+
+### **77. When a build fails in Jenkins, how will you send an email?**
+
+### 📝 Short Explanation  
+To notify stakeholders or developers about failed builds, Jenkins can send automated emails using the **Email Notification** or **Editable Email Notification** plugin.
+
+## ✅ Answer  
+
+When a Jenkins build fails, I configure it to **automatically send email alerts** using either the **built-in Email Notification** system or the **Email Extension Plugin** for more control.
+
+---
+
+### 🧭 Steps to Configure Email Notifications on Build Failure
+
+#### 1. 🧩 **Install Email Extension Plugin**
+- Go to **Manage Jenkins → Plugin Manager → Available**
+- Search and install: `Email Extension Plugin`
+
+---
+
+#### 2. ⚙️ **Global Configuration**
+Navigate to **Manage Jenkins → Configure System**  
+- Set SMTP details:
+  - SMTP server (e.g., `smtp.gmail.com`)
+  - Use SSL/TLS
+  - Port (typically 465 or 587)
+  - Jenkins Email address (default sender)
+- Set up authentication (username/password or app token)
+
+✅ Example (for Gmail):
+```text
+SMTP Server: smtp.gmail.com
+Use SSL: true
+Port: 465
+```
+
+---
+
+#### 3. 📤 **Configure Project to Send Emails**
+In your Jenkins pipeline job or freestyle job:
+
+- Scroll to **Post-build Actions**
+- Add **Editable Email Notification**
+  - **Project Recipient List:** e.g., `dev-team@example.com`
+  - **Triggers:** Select **Failure - Send email on build failure**
+
+✅ Optional Email Content:
+- Subject: `$PROJECT_NAME - Build #$BUILD_NUMBER - FAILED!`
+- Body:
+```groovy
+Build failed at $BUILD_URL
+Triggered by: $CAUSE
+```
+
+---
+
+#### 4. 🧪 **Testing**
+Trigger a dummy failure and confirm that email notifications are received.
+
+---
+
+### 🧠 Real-World Example
+
+In our Jenkins setup:
+- We used the **Email Extension Plugin**
+- Configured triggers for `FAILURE`, `UNSTABLE`, and `FIXED`
+- Used custom HTML templates to include links to logs and commit diffs
+- For pull requests, we added author-specific alerts using `git commit --author`
+
+---
+
+> Summary:  
+> To notify on build failure:
+> - Install and configure the Email Extension Plugin  
+> - Set SMTP details under Jenkins global settings  
+> - Enable email triggers in your job configuration  
+> - Customize recipient list and email templates for clarity
+
+---
