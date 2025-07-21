@@ -11,7 +11,9 @@ Welcome to **DevOps Interview Questions & Answers** – your one-stop destinatio
 This repository contains **550+ carefully curated interview questions** with detailed answers, covering **all major DevOps tools, cloud platforms, and best practices**. Whether you're a **beginner preparing for your first DevOps job** or an **experienced engineer aiming for top-tier roles**, this resource will help you **understand core concepts, ace technical interviews, and build confidence**.  
 
 We cover:  
-✅ **DevOps Fundamentals** – CI/CD, Automation, Infrastructure as Code (IaC)  
+✅ **DevOps Fundamentals** – CI/CD, Automation, Infrastructure as Code (IaC)
+✅ **Version Control** – Git
+✅ **Linux** – Linux, RHEL, ubuntu
 ✅ **Cloud Providers** – AWS, Azure, GCP, OpenStack  
 ✅ **Containers & Orchestration** – Docker, Kubernetes, Helm  
 ✅ **CI/CD & Automation** – Jenkins, ArgoCD, GitHub Actions  
@@ -91,7 +93,8 @@ We have **organized the questions based on DevOps tools and concepts**:
 
 | Category                      | 📂 Folder | 🔗 Link |  
 |--------------------------------|----------|---------|  
-| **DevOps Core Concepts**       | `core-concepts/` | [View Questions](core-concepts/README.md) |  
+| **DevOps Core Concepts**       | `core-concepts/` | [View Questions](core-concepts/README.md) |
+| **Version Control**            | `git` | [View Questions](git/README.md)    
 | **AWS, Azure, GCP**            | `cloud/` | [View Questions](cloud/README.md) |  
 | **Jenkins, GitHub Actions**    | `ci-cd/` | [View Questions](ci-cd/README.md) |  
 | **Docker, Kubernetes**         | `containers/` | [View Questions](containers/README.md) |  
