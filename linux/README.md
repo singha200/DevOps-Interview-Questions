@@ -572,4 +572,529 @@ If all else fails:
 
 ---
 
-## Question 7
+## Question 7 
+How do you find and list the log files older than 7 days in the `/var/log` folder?
+
+## ✅ Answer  
+You can use the `find` command with the `-mtime` option to locate files older than 7 days:
+
+```bash
+find /var/log -type f -mtime +7
+```
+
+### 📘 Detailed Explanation  
+
+#### 🔍 Breakdown of the command:
+
+- `find`: The Linux command to search for files in a directory hierarchy.
+- `/var/log`: The target directory that contains log files.
+- `-type f`: Limits the search to files (not directories).
+- `-mtime +7`: Filters files **modified more than 7 days ago**.
+  - `+7` means strictly older than 7 days.
+  - `-7` would mean newer than 7 days.
+
+---
+
+#### 🛠️ Practical Usage:
+If you want to **view the size and timestamp** of those files:
+```bash
+find /var/log -type f -mtime +7 -exec ls -lh {} \;
+```
+
+If you want to **delete** those files:
+```bash
+sudo find /var/log -type f -mtime +7 -delete
+```
+⚠️ Be careful with deletion — make sure you’ve reviewed the list first.
+
+---
+
+> Summary:  
+> Use `find /var/log -type f -mtime +7` to list log files older than 7 days — a must-know for log maintenance in production servers.
+
+---
+
+## Question 8
+Your application generates large logs in `/var/log/myapp/` and there's no log rotation setup.
+
+**Task:**  
+Write a shell script that compresses logs older than 7 days and deletes logs older than 30 days. Also, run it daily via cron.
+
+## ✅ Answer  
+### 🖥️ Shell Script: `log_cleanup.sh`
+
+```bash
+#!/bin/bash
+
+# Directory where logs are stored
+LOG_DIR="/var/log/myapp"
+LOG_FILE="/var/log/myapp/log_rotation.log"
+
+# Ensure the log directory exists
+if [ ! -d "$LOG_DIR" ]; then
+    echo "[$(date)] ERROR: Log directory $LOG_DIR does not exist!" >> "$LOG_FILE"
+    exit 1
+fi
+
+# Compress logs older than 7 days (but newer than 30)
+find "$LOG_DIR" -type f -name "*.log" -mtime +7 -mtime -30 ! -name "*.gz" -exec gzip {} \; -exec echo "[$(date)] Compressed: {}" >> "$LOG_FILE" \;
+
+# Delete compressed logs older than 30 days
+find "$LOG_DIR" -type f -name "*.gz" -mtime +30 -exec rm -f {} \; -exec echo "[$(date)] Deleted: {}" >> "$LOG_FILE" \;
+
+# Optional: Delete uncompressed logs older than 30 days
+find "$LOG_DIR" -type f -name "*.log" -mtime +30 -exec rm -f {} \; -exec echo "[$(date)] Deleted (uncompressed): {}" >> "$LOG_FILE" \;
+
+# Done
+echo "[$(date)] Log rotation completed successfully." >> "$LOG_FILE"
+
+```
+
+## Question 9
+You’ve received a CSV file with a list of usernames and passwords to create users on a Linux system.  
+
+**Task:**  
+Write a shell script to read the CSV and:
+- Create each user with the specified password.
+- Force password change on first login.
+
+```csv
+username,password
+alice,Password@123
+bob,Secure@456
+carol,DevOps@789
+```
+
+## ✅ Answer
+
+
+```bash
+#!/bin/bash
+
+INPUT="users.csv"
+
+# Check if the file exists
+if [[ ! -f "$INPUT" ]]; then
+  echo "CSV file not found!"
+  exit 1
+fi
+
+# Skip header and read each line
+tail -n +2 "$INPUT" | while IFS=',' read -r username password; do
+  # Check if user already exists
+  if id "$username" &>/dev/null; then
+    echo "User '$username' already exists. Skipping..."
+    continue
+  fi
+
+  # Create the user
+  useradd "$username"
+
+  # Set the password
+  echo "${username}:${password}" | chpasswd
+
+  # Force password change on first login
+  chage -d 0 "$username"
+
+  echo "User '$username' created successfully."
+done
+
+```
+
+---
+
+### ✅ Script Usage:
+Make it executable and run with root privileges:
+```bash
+chmod +x create_users.sh
+sudo ./create_users.sh
+```
+
+---
+
+### 🧠 How It Works:
+
+- `IFS=',' read -r ...` parses each line into `username` and `password`.
+- `useradd` creates the user.
+- `chpasswd` sets the password using `echo "$username:$password"`.
+- `chage -d 0` forces the user to reset their password on the first login.
+
+> Summary:  
+> This script reads a CSV file, creates users with the specified passwords, and ensures they are prompted to change their password at first login — a great example of secure onboarding automation.
+
+---
+
+## Question 10
+You are asked to monitor multiple services like `nginx`, `sshd`, and `docker`.  
+
+**Task:**  
+- Write a shell script that checks the status of each service.
+- If a service is stopped, attempt to restart it.
+- Print a clearly formatted report.
+
+## ✅ Answer  
+
+### 🖥️ Shell Script: `multi_service_monitor.sh`
+
+```bash
+#!/bin/bash
+
+# List of services to monitor
+services=("nginx" "sshd" "docker")
+
+# Report Header
+echo "-----------------------------------"
+echo "  Service Health Check Report"
+echo "-----------------------------------"
+
+# Loop through services
+for service in "${services[@]}"; do
+  if systemctl is-active --quiet "$service"; then
+    echo "$service is ✅ RUNNING"
+  else
+    echo "$service is ❌ STOPPED"
+    echo ""
+    echo "Attempting to restart $service..."
+
+    systemctl restart "$service" &> /dev/null
+
+    # Check if restart was successful
+    if systemctl is-active --quiet "$service"; then
+      echo "$service has been ✅ restarted successfully."
+    else
+      echo "❌ Failed to restart $service. Manual intervention needed."
+    fi
+  fi
+  echo "-----------------------------------"
+done
+```
+
+---
+
+### ✅ Example Output (if `docker` is down):
+
+```
+-----------------------------------
+  Service Health Check Report
+-----------------------------------
+nginx is ✅ RUNNING
+-----------------------------------
+sshd is ✅ RUNNING
+-----------------------------------
+docker is ❌ STOPPED
+
+Attempting to restart docker...
+docker has been ✅ restarted successfully.
+-----------------------------------
+```
+
+---
+
+### 📘 Detailed Explanation
+
+- **`services=(...)`**: An array of services to monitor.
+- **`systemctl is-active`**: Checks if a service is running.
+- **`systemctl restart`**: Tries to restart the service if it's not active.
+- **Conditional Restart Check**: After restarting, the script confirms whether the service started successfully.
+- **Output Formatting**: Clean section dividers and emojis provide clarity in console or logs.
+
+---
+
+### ⏰ Optional Cron Usage
+To run every 10 minutes:
+
+```bash
+*/10 * * * * /path/to/multi_service_monitor.sh >> /var/log/service_check.log 2>&1
+```
+
+> Summary:  
+> This script checks and restarts critical services like `nginx`, `sshd`, and `docker`, and reports the status clearly. It's a lightweight way to keep essential services alive without external monitoring tools.
+
+---
+
+## Question 11
+How do you find and delete files larger than 100MB from a given directory?
+
+## ✅ Answer  
+
+### 🖥️ Command (Using `find` and `-exec`)
+
+```bash
+find /path/to/directory -type f -size +100M -exec rm -f {} \;
+```
+
+---
+
+### 📘 Detailed Explanation
+
+#### 🔍 Breakdown:
+- `find`: Linux command to search for files and directories.
+- `/path/to/directory`: Replace with your target path (e.g., `/var/log`, `/tmp`).
+- `-type f`: Limits results to files only.
+- `-size +100M`: Matches files larger than 100 megabytes.
+- `-exec rm -f {} \;`: Deletes each matched file:
+  - `{}` is replaced by the filename.
+  - `\;` ends the `-exec` command.
+
+---
+
+### ✅ Preview Without Deleting (Dry Run)
+
+If you just want to see the files that would be deleted:
+
+```bash
+find /path/to/directory -type f -size +100M -exec ls -lh {} \;
+```
+
+This prints the size and path of each file over 100MB.
+
+---
+
+### ⚠️ Best Practices
+- Always dry-run before deleting anything in production.
+- Consider logging deletions or compressing instead of deleting if space permits.
+- Automate safely with cron jobs for specific paths, e.g., `/tmp` or `/var/cache`.
+
+> Summary:  
+> Use `find` with `-size +100M` and `-exec rm` to clean up oversized files and free up space. Always preview first to avoid accidental deletion of important files.
+
+---
+
+## Question 12 
+How do you get the list of users who logged into the system today?
+
+## ✅ Answer  
+
+### 🖥️ Command
+
+```bash
+last | grep "$(date '+%a %b %e')" | awk '{print $1}' | sort | uniq
+```
+
+---
+
+### 📘 Detailed Explanation
+
+#### 🔍 Breakdown:
+- `last`: Displays recent login history from `/var/log/wtmp`.
+- `date '+%a %b %e'`:
+  - Outputs today’s date in the format used by `last`, e.g., `Thu Jun 13`.
+  - `%a` = abbreviated weekday, `%b` = abbreviated month, `%e` = day of month (with space-padding).
+- `grep "$(date ...)"`: Filters only login entries for today.
+- `awk '{print $1}'`: Extracts the usernames from the matched lines.
+- `sort | uniq`: Removes duplicates to show unique users who logged in today.
+
+---
+
+### ✅ Example Output
+```
+ubuntu
+admin
+deploy
+```
+
+These are users who successfully logged in on the current date.
+
+---
+
+### 🧠 Bonus Tip
+If your system has rotated or missing wtmp logs, this command might show no results. You can verify with:
+```bash
+ls -lh /var/log/wtmp
+```
+
+Or check journal logs:
+```bash
+journalctl --since today | grep 'session opened'
+```
+
+> Summary:  
+> This command helps you identify which users logged in today — useful for basic auditing, usage tracking, or verifying automated logins.
+
+---
+
+## Question 13
+Your website is not loading.  
+**Task:**  
+Describe the step-by-step investigation process to identify and fix the issue.
+
+## ✅ Answer  
+
+Start from **external checks** and move inward, layer by layer:
+
+---
+
+### 🧭 1. **Is the site down for everyone or just me?**
+Use:
+```bash
+curl -I https://yourdomain.com
+ping yourdomain.com
+```
+Or check with [https://downforeveryoneorjustme.com](https://downforeveryoneorjustme.com)
+
+---
+
+### 🌐 2. **DNS Resolution**
+```bash
+dig yourdomain.com
+nslookup yourdomain.com
+```
+✅ Expect to get the correct IP.  
+❌ No IP? Check DNS settings in Route53 (AWS) or other DNS provider.
+
+---
+
+### 🔁 3. **Is the domain routing to the correct server?**
+Compare:
+```bash
+curl -v https://yourdomain.com
+```
+with server IP. If misrouted, verify **DNS records**, **load balancer config**, or **CDN rules**.
+
+---
+
+### 📡 4. **Network/Firewall Check**
+- From your system:
+```bash
+telnet yourdomain.com 443
+nc -zv yourdomain.com 80
+```
+- Check **security groups**, **firewalls**, or **NACLs** in cloud if ports are blocked.
+
+---
+
+### 🖥️ 5. **Is the Web Server running?**
+SSH into your instance and check:
+
+```bash
+sudo systemctl status nginx
+sudo systemctl status apache2
+```
+
+❌ If it’s down, restart:
+```bash
+sudo systemctl restart nginx
+```
+
+---
+
+### 🧱 6. **Check Application Logs**
+Look at logs for crash reports or errors:
+- `/var/log/nginx/error.log`
+- `/var/log/httpd/error_log`
+- App logs: `app.log`, `stderr`, etc.
+
+---
+
+### 💾 7. **Check Disk/Memory/CPU**
+```bash
+df -h
+top or htop
+free -m
+```
+✅ Ensure the server isn't unresponsive due to resource exhaustion.
+
+---
+
+### 🔄 8. **Check Backend Services (DB, Cache, etc.)**
+Your web app may be up, but failing due to:
+- MySQL/Postgres down
+- Redis/Memcached connection error
+- App server crashes
+
+---
+
+### 🔐 9. **SSL Certificate Issues**
+```bash
+curl -Iv https://yourdomain.com
+```
+Look for:
+```
+SSL certificate problem
+```
+
+If expired, renew via Let’s Encrypt or your CA.
+
+---
+
+### 🧪 10. **Rollback or Revert**
+If the issue started after a deploy:
+- Rollback to the previous working build.
+- Use:
+```bash
+kubectl rollout undo deployment your-deployment
+```
+or redeploy old version via your CI/CD.
+
+---
+
+### 🧠 Bonus Tip:
+- Always check **uptime monitoring**, **alerting tools**, or **dashboards**.
+- Build a **runbook** for your team for repeated scenarios.
+
+> Summary:  
+> Troubleshooting a website that won’t load requires a methodical approach — from DNS to server and app. Think layers: DNS → Network → Web Server → Application → Infrastructure → Dependencies.
+
+---
+
+## Question 14 
+How do you remove the first and last line of a file using `sed`?
+
+## ✅ Answer  
+
+### 🖥️ Command:
+
+```bash
+sed '1d; $d' filename.txt
+```
+
+---
+
+### 📘 Detailed Explanation
+
+#### 🔍 Breakdown:
+- `sed`: Stream editor used to process text line-by-line.
+- `'1d'`: Deletes the **first line** (`1` = line number).
+- `'$d'`: Deletes the **last line** (`$` = end of file).
+- `filename.txt`: The file to be processed.
+
+Together, the command says:
+> "Delete the first line **and** the last line from `filename.txt`."
+
+---
+
+### ✅ Example:
+
+If `file.txt` contains:
+```
+Line 1
+Line 2
+Line 3
+Line 4
+Line 5
+```
+
+Command:
+```bash
+sed '1d; $d' file.txt
+```
+
+Output:
+```
+Line 2
+Line 3
+Line 4
+```
+
+---
+
+### 🧠 Bonus Tip:
+If you want to **save the result to a new file**:
+```bash
+sed '1d; $d' file.txt > trimmed.txt
+```
+
+> Summary:  
+> The `sed '1d; $d'` command is an efficient way to remove both the first and last lines of a text file using line number and end-of-file markers.
+
+---
