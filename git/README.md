@@ -876,3 +876,167 @@ Hardcoded secrets in Git are one of the most common security missteps. Even priv
 > Rotate → Remove → Recommit safely → Enforce policies.
 
 ---
+
+## Question 16
+What are git hooks, how many types of git hooks you have used, and what are their use cases?
+## ✅ Answer
+Git hooks are scripts that run automatically at certain points in the Git workflow, allowing you to customize and automate tasks. They can be used for various purposes, such as enforcing coding standards, running tests, or sending notifications.
+### 📘 Detailed Explanation
+
+Git hooks are scripts that Git executes before or after certain events, like commits, merges, or pushes. They allow you to automate tasks and enforce policies in your Git workflow.
+### 🔍 Types of Git Hooks
+There are two main types of Git hooks:
+1. **Client-side hooks**: Run on your local machine when you perform actions like committing or merging.
+2. **Server-side hooks**: Run on the server when actions like receiving pushes or processing pull requests occur.
+### ✅ Common Client-side Hooks
+1. **`pre-commit`**: Runs before a commit is created. Used to check code quality, run linters, or prevent commits with errors.
+   - Example: Running a linter to ensure code style before committing.
+   ```bash
+   # .git/hooks/pre-commit
+   #!/bin/sh
+   npm run lint
+   ```
+2. **`commit-msg`**: Runs after the commit message is entered but before the commit is finalized. Used to validate commit messages against a standard format.
+   - Example: Ensuring commit messages follow a specific pattern.
+   ```bash
+   # .git/hooks/commit-msg
+   #!/bin/sh
+   if ! grep -qE "^(feat|fix|docs|style|refactor|test|chore): .+" "$1"; then
+       echo "Commit message must start with a type (feat, fix, docs, etc.)"
+       exit 1
+   fi
+   ```
+3. **`pre-push`**: Runs before pushing changes to a remote repository. Used to run tests or checks to ensure the code is ready for deployment.
+   - Example: Running tests before allowing a push.
+   ```bash
+   # .git/hooks/pre-push
+   #!/bin/sh
+   npm test
+   if [ $? -ne 0 ]; then
+       echo "Tests failed. Push aborted."
+       exit 1
+   fi
+   ```
+4. **`post-commit`**: Runs after a commit is created. Used for notifications or logging.
+   - Example: Sending a notification to a chat channel after a commit.
+   ```bash
+   # .git/hooks/post-commit
+   #!/bin/sh    
+    curl -X POST -H 'Content-type: application/json' \
+         --data '{"text":"New commit pushed!"}' \
+         https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXX
+    ```
+### ✅ Common Server-side Hooks
+1. **`pre-receive`**: Runs before any refs are updated on the server. Used to enforce policies or checks before accepting pushes.
+   - Example: Rejecting pushes that
+    do not meet certain criteria, like branch naming conventions.
+    ```bash
+    # .git/hooks/pre-receive
+    #!/bin/sh
+    while read oldrev newrev refname; do
+        if [[ "$refname" != "refs/heads/main" && "$refname" != "refs/heads/develop" ]]; then
+            echo "Only 'main' and 'develop' branches are allowed."
+            exit 1
+        fi
+    done
+    ```
+2. **`post-receive`**: Runs after refs are updated. Used for notifications or triggering CI/CD pipelines.
+   - Example: Triggering a CI build after a successful push.
+   ```bash
+    # .git/hooks/post-receive 
+    #!/bin/sh
+    curl -X POST http://ci-server/build?repo=your-repo
+    ```
+3. **`update`**: Runs before updating a ref. Used to enforce rules on individual branches.
+    - Example: Preventing force pushes to protected branches.
+    ```bash
+    # .git/hooks/update
+    #!/bin/sh
+    while read oldrev newrev refname; do
+        if [[ "$refname" == "refs/heads/main" && "$oldrev" != "
+$newrev" ]]; then
+            echo "Force pushes to 'main' are not allowed."
+            exit 1
+        fi
+    done
+    ```
+### ✅ Use Cases for Git Hooks
+- **Enforcing coding standards**: Use `pre-commit` to run linters or formatters.
+- **Validating commit messages**: Use `commit-msg` to ensure consistent commit message formats.
+- **Running tests**: Use `pre-push` to ensure code passes tests before pushing.
+- **Automating notifications**: Use `post-commit` or `post-receive` to send notifications to chat systems or trigger CI/CD pipelines.
+- **Enforcing branch policies**: Use `pre-receive` or `update` to restrict which branches can be pushed to or enforce naming conventions.
+### ✅ Summary
+Git hooks are powerful tools for automating tasks and enforcing policies in your Git workflow. They can be used to ensure code quality, validate commit messages, run tests, and trigger notifications. By implementing hooks, you can streamline your development process and maintain a consistent codebase across your team.
+
+## Question 17
+What is the difference between `git stash` and `git commit`? When would you use each?
+## ✅ Answer  
+- `git stash` temporarily saves your uncommitted changes, allowing you to switch branches or pull updates without committing. 
+- `git commit` permanently saves changes to the repository history.
+### 📘 Detailed Explanation 
+#### 🔹 `git stash`
+- **Purpose**: Temporarily save uncommitted changes in a stack, allowing you to switch branches or pull updates without committing.
+- **Usage**:
+  ```bash
+  git stash save "WIP: work in progress"
+  ```
+- **When to Use**:  
+    - When you need to switch branches but have uncommitted changes that you don't want to commit yet.
+    - When you want to pull updates from the remote branch without committing your current work.
+- **Example**: If you're working on a feature but need to quickly switch to `main` to fix a bug, you can stash your changes:
+
+```bash
+git stash save "WIP: feature work"
+git checkout main
+git pull origin main
+git checkout feature-branch
+git stash pop
+```
+#### 🔹 `git commit`
+- **Purpose**: Permanently save changes to the repository history, creating a new commit with a message describing the changes.
+- **Usage**:
+  ```bash
+  git commit -m "Add new feature"
+  ```
+- **When to Use**:
+    - When you have completed a logical unit of work and want to save it to the repository history.
+    - When you want to share your changes with others by pushing them to a remote repository.
+- **Example**: After completing a feature, you would commit your changes:
+```bash
+git add .
+git commit -m "Implement login feature with validation"
+```
+### ✅ Summary Table    
+| Command       | Purpose                                         | Changes History? | Use Case                                      |
+|---------------|-------------------------------------------------|------------------|-----------------------------------------------|
+| `git stash`   | Temporarily save uncommitted changes            | No               | Switch branches without committing             |
+| `git commit`  | Permanently save changes to the repository      | Yes              | Save completed work to the repository history |
+
+---
+
+## Question 18
+What is git cherry-pick? When would you use it?
+## ✅ Answer
+`git cherry-pick` is a command that allows you to apply the changes introduced by a specific commit from one branch onto another branch. It’s useful for selectively applying commits without merging entire branches.
+### 📘 Detailed Explanation
+#### 🔹 `git cherry-pick`
+- **Purpose**: Apply the changes from a specific commit onto the current branch, creating a new commit with those changes.
+- **Usage**:
+    ```bash
+    git cherry-pick <commit-hash>
+    ```
+- **When to Use**:
+    - When you want to apply a specific commit from another branch without merging the entire branch.
+    - When you need to backport a bug fix or feature from one branch to another.
+- **Example**: If you have a commit `abc123` on the `feature-branch` that fixes a critical bug, and you want to apply that fix to the `main` branch, you would do the following:
+```bash
+git checkout main
+git cherry-pick abc123
+```
+This will create a new commit on the `main` branch with the changes from `abc123`.
+### ✅ Benefits of Using `git cherry-pick`
+- **Selective Changes**: Allows you to apply only the changes you need without merging unrelated commits
+- **Backporting**: Useful for applying bug fixes or features to older branches without merging all changes
+- **Granular Control**: Gives you control over which specific changes to apply, rather than merging entire branches.
+---
