@@ -1,10 +1,6 @@
 # 🚀 DevOps Interview Questions & Answers  
 
-![DevOps Banner](https://imgur.com/7Vjj0UE.png)
-
 ## 📌 About This Repository  
-
-![about](https://imgur.com/i6dZXRH.png)
 
 Welcome to **DevOps Interview Questions & Answers** – your one-stop destination for mastering **DevOps, Cloud, and SRE interviews**! 🚀  
 
@@ -39,53 +35,6 @@ We cover:
 **💡 New to DevOps Interviews?** Start with our **[Beginner's Guide](#📌-how-to-use-this-repository)** to get a roadmap!  
 
 ---
-
-## 📂 Topics Covered  
-
-> [!IMPORTANT]
->
-> This repository is structured into multiple categories to **help you navigate easily**:  
-
-✅ **DevOps Fundamentals**: What is DevOps? Key principles and SDLC integration  
-✅ **Cloud Computing**: AWS, Azure, GCP, OpenStack, Cloud-Native Services  
-✅ **CI/CD Pipelines**: Jenkins, GitHub Actions, GitLab CI/CD, ArgoCD  
-✅ **Containers & Orchestration**: Docker, Kubernetes, Helm, OpenShift  
-✅ **Infrastructure as Code**: Terraform, Ansible, CloudFormation  
-✅ **Monitoring & Logging**: Prometheus, Grafana, ELK Stack, New Relic  
-✅ **Networking & Security**: Firewalls, Load Balancers, IAM, SSL/TLS  
-✅ **Scripting & Automation**: Bash, Python, YAML, Groovy  
-✅ **DevOps Best Practices & Real-World Scenarios**  
-
-📜 **Currently, the repository contains over 550+ handpicked DevOps questions!**  
-
-> [!NOTE]
->
-> This repository is meant to provide **realistic** interview questions and **not just theoretical answers**. Expect **scenario-based** and **practical** discussions!  
-
----
-
-## 📂 Repository Structure  
-
-We have **organized the questions based on DevOps tools and concepts**:  
-
-```
-📦 devops-interview-questions  
- ├── 📁 core-concepts/             # DevOps fundamentals  
- ├── 📁 cloud/                     # AWS, Azure, GCP, OpenStack  
- ├── 📁 ci-cd/                     # Jenkins, GitHub Actions, GitLab CI/CD  
- ├── 📁 containers/                # Docker, Kubernetes, Helm  
- ├── 📁 infrastructure-as-code/     # Terraform, Ansible, CloudFormation  
- ├── 📁 monitoring-logging/         # Prometheus, Grafana, ELK Stack  
- ├── 📁 networking-security/        # IAM, Firewalls, Load Balancers  
- ├── 📁 automation-scripting/       # Bash, Python, YAML, Groovy  
- ├── 📁 best-practices/             # Real-world scenarios & case studies  
- ├── 📁 mock-interviews/            # Mock interview questions and solutions  
- ├── 📁 cheat-sheets/               # Quick reference guides  
- ├── 📁 docs/                       # Folder for PDFs & Docs 
- ├── 📄 CONTRIBUTING.md             # Contribution guidelines  
- ├── 📄 LICENSE                     # License information  
- └── 📄 README.md                   # Project overview (this file)  
-```  
 
 ---
 
@@ -137,15 +86,6 @@ We have **organized the questions based on DevOps tools and concepts**:
 
 ## 🔥 Mock Interviews & Real-World Scenarios  
 
-> [!NOTE]
->
-> In addition to standard interview questions, we include:  
-> ✅ **Real-world problems DevOps engineers face**  
-> ✅ **Kubernetes troubleshooting case studies**  
-> ✅ **CI/CD pipeline failures & debugging challenges**  
-> ✅ **Cloud deployment strategies & best practices**  
-> ✅ **Networking & Security compliance scenarios**  
->
 > 📌 **[Check Out Mock Interviews & Scenarios](mock-interviews/README.md)**  
 
 ---
@@ -190,22 +130,6 @@ Looking for **downloadable PDFs** of **DevOps interview questions, cheat sheets,
 
 📄 Read the [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.  
 
----
-
-## 🚀 What's Coming Next?  
-
-✅ **More Real-World Case Studies**  
-✅ **Cloud & Kubernetes Troubleshooting Questions**  
-✅ **DevOps Roadmaps for Beginners & Experts**  
-✅ **Live Mock Interview Recordings (YouTube/Blog)**  
-
-📌 **Follow for Updates:**  
-🔗 **GitHub**: [@NotHarshhaa](https://github.com/NotHarshhaa)  
-📝 **Blog**: [ProDevOpsGuy](https://blog.prodevopsguy.xyz)  
-💬 **Telegram Community**: [Join Here](https://t.me/prodevopsguy)  
-
----
-
 ## ⭐ Support This Project  
 
 If this repository **helped you**, please:  
@@ -214,5 +138,3 @@ If this repository **helped you**, please:
 ✅ **Contribute** by adding new questions  
 
 🚀 **Happy Learning & Best of Luck for Your DevOps Interviews!** 🚀  
-
-![banner](https://imgur.com/8ypFtRx.png)
