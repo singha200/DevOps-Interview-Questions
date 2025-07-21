@@ -44,7 +44,6 @@ We cover:
 |--------------------------------|----------|---------|  
 | **DevOps Core Concepts**       | `core-concepts/` | [View Questions](core-concepts/README.md) |
 | **Version Control**            | `git/` | [View Questions](git/README.md) |
-| **Operating System**           | `linux/` | [View Questions](linux/README.md)
 | **AWS, Azure, GCP**            | `cloud/` | [View Questions](cloud/README.md) |  
 | **Jenkins, GitHub Actions**    | `ci-cd/` | [View Questions](ci-cd/README.md) |  
 | **Docker, Kubernetes**         | `containers/` | [View Questions](containers/README.md) |  
