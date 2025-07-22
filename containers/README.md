@@ -159,6 +159,129 @@ Docker Compose is a tool for **defining and running multi-container applications
 | **Overridable?** | Yes | No (unless `--entrypoint` is used) |
 | **Example** | `CMD ["python", "app.py"]` | `ENTRYPOINT ["nginx", "-g", "daemon off;"]` |
 
+### **11. Docker container exits immediately after running a command. How can you troubleshoot?**
+**Answer:**  
+- Check the container logs: `docker logs <container_id>`  
+- Use `docker inspect <container_id>` to view container details.
+- Ensure the command in the Dockerfile or `docker run` is correct and does not exit prematurely.  
+- If using `CMD`, consider using `ENTRYPOINT` for long-running processes.
+
+### **12. what is the purpose of EXPOSE in Dockerfile?**
+**Answer:**  
+The `EXPOSE` instruction in a Dockerfile is used to indicate which ports the container will listen on at runtime. It serves as documentation and does not actually publish the port. To publish the port, you need to use the `-p` option with `docker run`.
+
+### **13. port is not accessible on localhost after running a Docker container. How can you troubleshoot?**
+**Answer:**  
+- Ensure you are using the `-p` option to map the container port to the host port: `docker run -p 8080:80 nginx`  
+- Check if the container is running: `docker ps`  
+- Verify that the application inside the container is listening on the correct port.  
+- Check firewall settings on the host machine that may block access to the port.
+
+### **14. Data lost when a Docker container is stopped. How can you persist data?**  
+**Answer:**  
+- Use **Docker volumes** to persist data outside the container's filesystem.  
+- Example: `docker run -v mydata:/data nginx`  
+- Use **bind mounts** to link a host directory to a container directory: `docker run -v /host/path:/container/path nginx`  
+- Ensure the application inside the container writes data to the mounted volume or bind mount.
+
+### **15. you made change in your code, rebuilt the image but the changes are not reflected in the running container. How can you resolve this?**
+**Answer:**  
+- Ensure you rebuild the image with the `docker build` command.  
+- Use the `--no-cache` option to avoid using cached layers: `docker build --no-cache -t myapp .`  
+- Restart the container with the new image: `docker run -d --name myapp myapp:latest`  
+- If using Docker Compose, run `docker-compose up -d --build` to rebuild and restart the service with the latest changes.
+
+### **16. App crashes with "permission denied" in container but works on host. How can you resolve this?**
+**Answer:**  
+- Ensure the user running the application inside the container has the necessary permissions to access files or directories.  
+- Use the `USER` instruction in the Dockerfile to run the application as a non-root user with appropriate permissions.  
+- If using bind mounts, ensure the host directory has the correct permissions for the user inside the container.  
+- You can also use `chmod` or `chown` commands to adjust permissions on the host directory before running the container.
+
+### **17. Docker host is running out of disk space after running multiple containers. How can you free up space?**
+**Answer:**  
+- Remove unused containers: `docker container prune`  
+- Remove unused images: `docker image prune -a`  
+- Remove unused volumes: `docker volume prune`  
+- Use `docker system prune` to remove all unused data (containers, images, networks, and build cache).  
+- Regularly clean up old images and containers to prevent disk space issues.
+
+### **18. How will you debug a live Docker container?**
+**Answer:**  
+- Use `docker exec -it <container_id> /bin/sh` to access the container's shell for debugging.  
+- Check logs with `docker logs <container_id>`.  
+- Use `docker inspect <container_id>` to view container details and configuration.  
+- Use `docker top <container_id>` to see running processes inside the container.
+
+### **19. which container registry you are using in your organization?**
+**Answer:**  
+- We use **Docker Hub** for public images and **AWS ECR (Elastic Container Registry)** for private images.  
+- We also use **GitHub Container Registry** for CI/CD workflows and **Google Container Registry** for GCP deployments.  
+- For sensitive applications, we use **Harbor** as a private container registry to manage and secure our images.
+- we use quay.io for openshift deployments.
+
+### **20. What is the difference between Entrypoint and CMD in Docker?**
+**Answer:**
+**ENTRYPOINT** is used to define the main command that will always run when the container starts, while **CMD** provides default arguments to that command. If both are specified, CMD arguments will override the ENTRYPOINT arguments.  
+- **ENTRYPOINT** is not overridden by command-line arguments, while **CMD** can be overridden.  
+- Best practice: Use **ENTRYPOINT** for the main application command and **CMD** for default arguments.
+
+### **21. What are the best practices for writing Dockerfiles?**
+**Answer:**
+- Use a **minimal base image** (e.g., `alpine` or `scratch`) to reduce image size.  
+- Combine multiple `RUN` commands into one to minimize layers.  
+- Use `.dockerignore` to exclude unnecessary files from the build context.  
+- Use **multi-stage builds** to keep the final image small.  
+- Specify a **non-root user** to run the application for security.  
+- Use **explicit version tags** for base images to ensure consistency.
+- Keep the Dockerfile **simple and readable** by using comments and clear instructions.
+
+### **22. How do you handle secrets in Docker?**
+**Answer:**
+- Use **Docker secrets** for sensitive data in Swarm mode:
+```sh
+docker secret create my_secret my_secret_file
+```
+- Use environment variables for non-sensitive data:
+```sh
+docker run -e MY_ENV_VAR=value myapp
+```
+- Avoid hardcoding secrets in Dockerfiles or images.
+- Use external secret management tools like **HashiCorp Vault** or **AWS Secrets Manager**
+- Use **Docker Compose** to define secrets:
+```yaml
+version: '3.7'
+services:
+  myapp:
+    image: myapp  
+    secrets:
+      - my_secret
+secrets:
+  my_secret:
+    file: ./my_secret_file
+```
+### **23. What docker commands do you use daily?**
+**Answer:**
+- `docker ps`: List running containers.
+- `docker images`: List available images.
+- `docker run`: Start a new container.
+- `docker exec`: Execute commands inside a running container.
+- `docker logs`: View logs of a container.
+- `docker build`: Build a Docker image from a Dockerfile.
+- `docker-compose up`: Start services defined in a `docker-compose.yml` file.
+- `docker network ls`: List Docker networks.    
+- `docker volume ls`: List Docker volumes.
+- `docker system df`: Check disk usage by Docker objects.
+- `docker inspect`: Get detailed information about a container or image.
+
+### **24. when will you forcefully remove a docker container?**
+**Answer:**
+- When a container is stuck in a **"running"** state and not responding to normal stop commands.
+- When a container is consuming excessive resources and needs to be terminated immediately.
+- When a container is in a **"dead"** state and cannot be restarted.
+- When you need to quickly clean up resources during development or testing.
+- Use the command: `docker rm -f <container_id>` to forcefully remove a container.
+
 ---
 
 ## **Kubernetes Basics**  
