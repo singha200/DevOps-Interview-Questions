@@ -166,6 +166,35 @@ This removes all resources defined in the configuration.
 
 ---
 
+**10. What is the difference between for_each and for in Terraform?**
+**Answer:**
+**for_each** is used to create multiple instances of a resource based on a map or set, while **for** is used for iterating over lists or maps to generate values.
+
+**11. What are modules in terraform and why should you use them?**
+**Answer:**
+Modules are **self-contained packages** of Terraform configurations that can be reused across different projects. They promote **code reusability**, **organization**, and **scalability**.
+
+**12. What is the role of statefile in Terraform?**
+**Answer:**
+The state file (`terraform.tfstate`) is a **snapshot of the current infrastructure** managed by Terraform. It tracks resource attributes and dependencies, enabling Terraform to manage updates and changes effectively.
+
+**13. Have you considered storing statefile in git instead of AWS S3 or Azure Blob?**
+**Answer:**
+Storing the state file in Git is **not recommended** due to security risks and potential conflicts. Instead, use remote backends like AWS S3 or Azure Blob for better security and collaboration.
+
+**14. Explain terraform statefile management.**
+**Answer:**
+Terraform state file management involves:
+- **Initialization**: Setting up the state file with `terraform init`.
+- **Locking**: Preventing concurrent modifications using remote backends.
+- **Versioning**: Keeping track of changes to the state file.
+- **Backup**: Regularly backing up the state file to prevent data loss. 
+
+**15. Two devops engineers attempt to update statefile at once. what happens?**
+**Answer:**
+
+
+
 ### **Ansible Questions**  
 
 ### **11. What is Ansible and how does it work?**  
