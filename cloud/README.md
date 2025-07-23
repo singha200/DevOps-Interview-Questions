@@ -399,27 +399,77 @@ Cloud governance ensures compliance, security, and cost control.
 
 ---
 
-## **📢 Contribute & Stay Updated**  
+### **61. Explain how will you design a highly available and scalable multi-tier app in aws.
+**Answer:**
+To design a highly available and scalable multi-tier application in AWS, follow these steps:  
+1. **Architecture Overview:**
+   - Use a **three-tier architecture**: Presentation Layer (Web Servers), Application Layer (Application Servers), and Data Layer (Database).
+   - Deploy each tier in multiple **Availability Zones (AZs)** for high availability.
+2. **Load Balancing:**
+   - Use **Elastic Load Balancer (ELB)** to distribute incoming traffic across multiple web servers in different AZs.
+3. **Auto Scaling:**
+   - Set up **Auto Scaling Groups (ASG)** for web and application servers to automatically scale in or out based on traffic load.
+   - Define scaling policies based on metrics like CPU utilization or request count.
+4. **Database Layer:**
+   - Use **Amazon RDS** for relational databases with Multi-AZ deployments for high availability.
+   - For NoSQL, consider **Amazon DynamoDB** with on-demand capacity mode for automatic scaling.
+5. **Caching:**
+   - Implement **Amazon ElastiCache** (Redis or Memcached) to cache frequently accessed data and reduce database load.
+6. **Content Delivery:**
+   - Use **Amazon CloudFront** as a Content Delivery Network (CDN) to cache static assets closer to users, reducing latency.
+7. **Security:**
+   - Use **AWS Identity and Access Management (IAM)** for fine-grained access control.
+   - Implement **Security Groups** and **Network ACLs** to control inbound and outbound traffic.
+   - Enable **AWS WAF** to protect against common web exploits.
+8. **Monitoring and Logging:**
+   - Use **Amazon CloudWatch** for monitoring application performance and setting up alarms.
+   - Enable **AWS CloudTrail** for auditing API calls and changes in the environment.
+9. **Backup and Disaster Recovery:**
+   - Implement regular backups using **Amazon RDS automated backups** or **DynamoDB point-in-time recovery**.
+   - Use **AWS Backup** for centralized backup management across services.
+10. **Deployment Strategy:**
+    - Use **AWS CodeDeploy** or **AWS Elastic Beanstalk** for automated deployments and updates.
+    - Consider blue-green deployments or canary releases to minimize downtime during updates.
 
-💡 **Want to contribute?**  
-We **welcome contributions!** If you have insights, new tools, or improvements, feel free to submit a **pull request**.  
+### **62. How will you implement networking compoenents for 3 tier architecture**
+**Answer:**
+To implement networking components for a three-tier architecture in AWS, follow these steps:
 
-📌 **How to Contribute?**
+1. **VPC Creation:**
+   - Create a **Virtual Private Cloud (VPC)** to isolate your application network.
+   - Define the CIDR block (e.g., `10.0.0.0/16`).
 
-- Read the **[CONTRIBUTING.md](https://github.com/NotHarshhaa/DevOps-Interview-Questions/blob/master/CONTRIBUTING.md)** guide.  
-- Fix errors, add missing topics, or suggest improvements.  
-- Submit a **pull request** with your updates.  
+2. **Subnet Design:**
+   - Create **public subnets** for the presentation (web) tier in multiple Availability Zones (AZs) for high availability.
+   - Create **private subnets** for the application tier in multiple AZs.
+   - Create **private subnets** (with no direct internet access) for the database tier in multiple AZs.
 
-📢 **Stay Updated:**  
-⭐ **Star the repository** to get notified about new updates and additions.  
-💬 **Join discussions** in **[GitHub Issues](https://github.com/NotHarshhaa/DevOps-Interview-Questions/issues)** to suggest improvements.  
+3. **Internet Gateway & NAT Gateway:**
+   - Attach an **Internet Gateway** to the VPC for internet access to public subnets.
+   - Deploy **NAT Gateways** in public subnets to allow instances in private subnets (app tier) to access the internet securely (for updates, etc.) without exposing them directly.
 
----
+4. **Route Tables:**
+   - Associate route tables to control traffic flow:
+     - Public subnets: Route 0.0.0.0/0 to the Internet Gateway.
+     - Private subnets (app tier): Route internet-bound traffic to the NAT Gateway.
+     - Private subnets (db tier): No outbound internet route for maximum security.
 
-## **🌍 Community & Support**  
+5. **Security Groups & Network ACLs:**
+   - Use **Security Groups** to control inbound/outbound traffic at the instance level:
+     - Web tier: Allow HTTP/HTTPS from the internet.
+     - App tier: Allow traffic only from the web tier.
+     - DB tier: Allow traffic only from the app tier.
+   - Use **Network ACLs** for additional subnet-level security.
 
-🔗 **GitHub:** [@NotHarshhaa](https://github.com/NotHarshhaa)  
-📝 **Blog:** [ProDevOpsGuy](https://blog.prodevopsguy.xyz)  
-💬 **Telegram Community:** [Join Here](https://t.me/prodevopsguy)  
+6. **Load Balancer:**
+   - Deploy an **Application Load Balancer (ALB)** in public subnets to distribute traffic to web servers in the web tier.
 
-![Follow Me](https://imgur.com/2j7GSPs.png)
+7. **Bastion Host (Optional):**
+   - Place a **Bastion Host** in a public subnet for secure SSH access to instances in private subnets.
+
+8. **VPC Endpoints (Optional):**
+   - Use **VPC Endpoints** for private connectivity to AWS services (like S3) without traversing the internet.
+
+This setup ensures isolation, security, and scalability for each tier in your architecture.
+
+
