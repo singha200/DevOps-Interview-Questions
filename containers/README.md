@@ -286,7 +286,7 @@ secrets:
 
 ## **Kubernetes Basics**  
 
-### **11. What is Kubernetes?**  
+### **11. What is Kubernetes and explain its architecture?**  
 
 **Answer:**  
 Kubernetes (K8s) is an **orchestration platform** for managing containerized applications.  
@@ -296,6 +296,18 @@ Kubernetes (K8s) is an **orchestration platform** for managing containerized app
   ✅ **Self-healing** (restarts failed containers)  
   ✅ **Load balancing**  
   ✅ **Rolling updates**  
+- **Architecture Components:**  
+   - divided in control plane and data plane
+  - **Control Plane**: Manages the cluster, including scheduling and maintaining the desired state. Controls the cluster, manages API server, scheduler, and controller manager.  
+  - **Data Plane**: Runs the applications in Pods. Components like Nodes, Kubelet, and Kube-proxy. 
+  - **Nodes**: Machines (physical or virtual) that run the Pods.  
+  - **Components**:  
+  - **etcd**: Distributed key-value store for cluster state. All cluster data is stored here. you can consider it as a database for kubernetes cluster. 
+  - **Kube-apiserver**: API server for communication. Every request to the cluster goes through this. 
+  - **Kube-controller-manager**: Manages controllers for different resources. Like replicaset controller, node controller, etc.  
+  - **Kube-scheduler**: Assigns Pods to Nodes based on resource availability and policies like affinity and anti-affinity. 
+  - **Kubelet**: Agent that runs on each Node, ensuring Pods are running, invoke the container run time to run the pod on worker node.  
+  - **Kube-proxy**: Manages network routing to Pods. when service is created, kube-proxy creates iptables rules to route traffic to the correct pod.service->kube proxy->iptables rules->pod. 
 
 ---
 
@@ -306,7 +318,7 @@ A **Pod** is the smallest unit in Kubernetes. It **groups one or more containers
 
 ---
 
-### **13. What is a Kubernetes Deployment?**  
+### **13. What is a Kubernetes Deployment and how various componenets of kubernetes interact when you run kubectl apply(pod)?**  
 
 **Answer:**  
 A **Deployment** manages Pod creation and updates.  
@@ -335,17 +347,29 @@ spec:
 - `replicas: 3` → Runs **3 instances**.  
 - `matchLabels` → Ensures the correct Pods are managed.  
 
+when you run `kubectl apply -f pod.yaml`, the following happens:
+- When you run kubectl apply, it sends an HTTPS request to the Kubernetes API server with your Pod spec.
+The API server stores it in etcd, and the scheduler assigns it to a node.
+Kubelet on that node watches the API server, pulls the image, and starts the Pod.
+Networking is set up via CNI, enabling Pod-to-Pod and Pod-to-Service communication.
+- kubectl → API Server → etcd  
+            ↓  
+        Scheduler ← watches  
+            ↓  
+        API Server → Kubelet (on node) → Container Runtime (pull image) → CNI Plugin → Pod (running)
 ---
 
 ### **14. What is a Kubernetes Service?**  
 
 **Answer:**  
-A **Service** exposes a set of Pods over a network.  
+A **Service** exposes a set of Pods over a network. By default follows round robin load balancing. Service uses a label and **selector** to identify Pods and dns to resolve the service name to the IP address of the Pods. 
 
 - **Types:**  
-  - **ClusterIP** (default)  
-  - **NodePort** (exposes on a fixed port)  
-  - **LoadBalancer** (uses cloud provider's load balancer)  
+  - **ClusterIP** (default) will expose the service on a cluster-internal IP.so that it can be accessed only within the cluster by other pods. 
+  - **NodePort** (exposes on a fixed port) will expose the service on each Node's IP at a static port. This allows external traffic to access the service via `<NodeIP>:<NodePort>`.  
+  - **LoadBalancer** (uses cloud provider's load balancer) will create an external load balancer that routes traffic to the service.
+  - **ExternalName** (maps to an external DNS name) will map the service to an external DNS name.  
+  - **Headless Service** (no ClusterIP) allows direct access to Pods without load balancing. used for stateful applications like databases. 
 
 Example YAML:  
 
@@ -434,6 +458,15 @@ Update the image and apply changes:
 kubectl set image deployment/my-app my-container=nginx:latest
 ```
 
+---
+
+### **21. Why is hardcoding pod ip in application code not recommended?**
+**Answer:**
+Hardcoding Pod IPs is not recommended because:
+- **Dynamic IPs**: Pod IPs can change when Pods are restarted or rescheduled.
+- **Scaling Issues**: As the number of Pods increases, hardcoded IPs become unmanageable.
+- **Service Discovery**: Kubernetes provides services for dynamic discovery, allowing Pods to communicate without relying on fixed IPs.
+- **Load Balancing**: Services can distribute traffic across multiple Pods, which is not possible with hardcoded IPs.
 ---
 
 ## **🚀 Intermediate-Level Docker & Kubernetes Questions (21-40)**  
@@ -633,20 +666,112 @@ kubectl logs -f my-pod  # Stream logs in real-time
 ### **34. What are Kubernetes Labels and Selectors?**  
 
 **Answer:**  
-Labels **identify** resources, while selectors **filter resources**.  
-Example:  
+### Short explanation of the question  
+This question evaluates your understanding of how Kubernetes identifies and groups objects like pods, services, or deployments using metadata. It's fundamental to pod selection, service discovery, and workload management.
+
+---
+
+### Answer  
+**Labels** are key-value pairs attached to Kubernetes objects for identification, while **selectors** are used to filter or group objects based on their labels. Services, ReplicaSets, and deployments use selectors to manage the right set of pods.
+
+---
+
+### Detailed explanation of the answer for readers’ understanding
+
+---
+
+## 🏷️ What are Labels?
+
+Labels are **metadata** assigned to Kubernetes objects such as pods, nodes, services, etc.
 
 ```yaml
 metadata:
   labels:
-    app: my-app
+    app: frontend
+    env: production
 ```
 
-To filter pods by label:  
+These labels help Kubernetes components **identify, select, or group** resources dynamically.
 
-```sh
-kubectl get pods -l app=my-app
+---
+
+## 🔍 What are Selectors?
+
+Selectors are **queries** used by other resources to match specific labels. For example, a service can use a selector to send traffic only to pods with a particular label.
+
+```yaml
+selector:
+  app: frontend
 ```
+
+---
+
+### 🧪 Example: Pod + Service using Labels and Selectors
+
+**Pod:**
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend-pod
+  labels:
+    app: frontend
+    tier: web
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+```
+
+**Service:**
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+```
+
+- The service will automatically **discover and route traffic** to all pods with label `app: frontend`.
+
+---
+
+### 🎯 Why Labels & Selectors Are Useful
+
+| Use Case                        | How Labels Help |
+|----------------------------------|-----------------|
+| Service-to-Pod communication     | Services use selectors to match pods |
+| Rolling updates & scaling        | Deployments use label selectors |
+| Monitoring & grouping metrics    | Tools like Prometheus use labels |
+| Cost allocation or chargeback    | Labels can represent teams, owners, or projects |
+| Node affinity & scheduling       | Pods match labels on nodes |
+
+---
+
+### 🧠 Real-world Insight
+
+> “We used labels like `team: payments` and `env: staging` to filter out specific pods in monitoring dashboards and CI pipelines. Our deployment strategy relied heavily on matching these labels for safe rollouts.”
+
+---
+
+### Summary
+
+| Concept     | Purpose |
+|-------------|---------|
+| Label       | Metadata to tag objects |
+| Selector    | Query to match label values and group resources |
+
+---
+
+### Key takeaway
+
+> "Labels describe objects; selectors find and group them. Together, they enable dynamic, flexible, and scalable Kubernetes management."
 
 ---
 
