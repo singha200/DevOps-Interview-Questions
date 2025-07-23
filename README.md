@@ -49,7 +49,7 @@ We cover:
 | **Jenkins, GitHub Actions**    | `ci-cd/` | [View Questions](ci-cd/README.md) |  
 | **Docker, Kubernetes**         | `containers/` | [View Questions](containers/README.md) |  
 | **Terraform, Ansible**         | `infrastructure-as-code/` | [View Questions](infrastructure-as-code/README.md) |  
-| **Prometheus, ELK Stack**      | `monitoring-logging/` | [View Questions](monitoring-logging/README.md) |  
+| **Prometheus, ELK Stack, Observability**      | `monitoring-logging/` | [View Questions](monitoring-logging/README.md) |  
 | **IAM, Security, Networking**  | `networking-security/` | [View Questions](networking-security/README.md) |  
 | **Scripting & Automation**     | `automation-scripting/` | [View Questions](automation-scripting/README.md) |  
 | **Mock Interviews & Scenarios**| `mock-interviews/` | [View Questions](mock-interviews/README.md) |  
