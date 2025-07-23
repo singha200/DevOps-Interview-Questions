@@ -452,27 +452,198 @@ Ansible modules ensure **idempotency** by only making changes when needed.
 
 ---
 
-## **📢 Contribute & Stay Updated**  
+### **61. ## What are some common Python packages that you use as a DevOps Engineer?
 
-💡 **Want to contribute?**  
-We **welcome contributions!** If you have insights, new tools, or improvements, feel free to submit a **pull request**.  
+### Answer Some commonly used Python packages for DevOps Engineers include `boto3`, `paramiko`, `requests`, `pyyaml`, `docker`, `kubernetes`, `fabric`, and `pytest`.
 
-📌 **How to Contribute?**
+### Detailed explanation (with examples)
 
-- Read the **[CONTRIBUTING.md](https://github.com/NotHarshhaa/DevOps-Interview-Questions/blob/master/CONTRIBUTING.md)** guide.  
-- Fix errors, add missing topics, or suggest improvements.  
-- Submit a **pull request** with your updates.  
+1. **boto3** – AWS SDK for Python  
+   Used to automate and manage AWS services.
+   
+```
+   Example:
+       import boto3
+       ec2 = boto3.client('ec2')
+       response = ec2.describe_instances()
+       print(response)
+```
 
-📢 **Stay Updated:**  
-⭐ **Star the repository** to get notified about new updates and additions.  
-💬 **Join discussions** in **[GitHub Issues](https://github.com/NotHarshhaa/DevOps-Interview-Questions/issues)** to suggest improvements.  
+2. **paramiko** – SSH and remote command execution  
+   Useful for running remote shell commands or transferring files via SFTP.
+   
+```
+   Example:
+       import paramiko
+       ssh = paramiko.SSHClient()
+       ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+       ssh.connect(hostname='remote.server.com', username='user', password='pass')
+       stdin, stdout, stderr = ssh.exec_command('uptime')
+       print(stdout.read().decode())
+       ssh.close()
+```
 
----
+3. **requests** – HTTP requests  
+   Used for interacting with REST APIs and webhooks.
 
-## **🌍 Community & Support**  
+```
+   Example:
+       import requests
+       response = requests.get('https://api.example.com/status')
+       print(response.status_code)
+       print(response.json())
+```
 
-🔗 **GitHub:** [@NotHarshhaa](https://github.com/NotHarshhaa)  
-📝 **Blog:** [ProDevOpsGuy](https://blog.prodevopsguy.xyz)  
-💬 **Telegram Community:** [Join Here](https://t.me/prodevopsguy)  
+4. **pyyaml** – YAML parsing and generation  
+   Very useful when dealing with Kubernetes manifests or configuration files.
 
-![Follow Me](https://imgur.com/2j7GSPs.png)
+```
+   Example:
+       import yaml
+       with open('config.yaml', 'r') as file:
+           config = yaml.safe_load(file)
+       print(config)
+```
+
+5. **docker** – Docker SDK for Python  
+   Used to manage Docker containers, images, and volumes programmatically.
+
+```
+   Example:
+       import docker
+       client = docker.from_env()
+       for container in client.containers.list():
+           print(container.name, container.status)
+```
+
+6. **kubernetes** – Kubernetes Python client  
+   Helps in automating Kubernetes resource creation, deletion, and monitoring.
+
+```
+   Example:
+       from kubernetes import client, config
+       config.load_kube_config()
+       v1 = client.CoreV1Api()
+       pods = v1.list_pod_for_all_namespaces()
+       for pod in pods.items:
+           print(pod.metadata.name)
+```
+
+7. **fabric** – High-level SSH command execution  
+   Simplifies automation tasks on remote servers.
+
+```
+   Example:
+       from fabric import Connection
+       c = Connection('user@host')
+       c.run('uname -a')
+```
+
+8. **pytest** – Python testing framework  
+   Useful for writing automated tests for infrastructure or config scripts.
+
+```
+   Example:
+       def add(a, b):
+           return a + b
+
+       def test_add():
+           assert add(2, 3) == 5
+```
+
+### **62. Python script to run a container using Docker SDK - User provides image name as input
+
+### Answer Use `docker.from_env()` to connect to the local Docker engine and run the container with the provided image name.
+
+### Detailed explanation (with examples)
+
+Here is the complete Python script:
+
+```
+import docker
+
+# Initialize Docker client
+client = docker.from_env()
+
+# Get image name from user input
+image_name = input("Enter the Docker image name (e.g., nginx:latest): ").strip()
+
+try:
+    # Pull the image (if not present locally)
+    print(f"Pulling image '{image_name}'...")
+    client.images.pull(image_name)
+    print(f"Image '{image_name}' pulled successfully.")
+
+    # Run the container
+    print(f"Running container from image '{image_name}'...")
+    container = client.containers.run(image_name, detach=True)
+    print(f"Container started with ID: {container.id[:12]}")
+
+except docker.errors.ImageNotFound:
+    print(f"Error: Image '{image_name}' not found.")
+except docker.errors.APIError as e:
+    print(f"Docker API error: {e}")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+```
+
+### Example usage
+
+When you run the script:
+
+    Enter the Docker image name (e.g., nginx:latest): alpine
+
+Expected output:
+
+    Pulling image 'alpine'...
+    Image 'alpine' pulled successfully.
+    Running container from image 'alpine'...
+    Container started with ID: 3e1fabc2d789
+
+This script assumes Docker is installed and the user has permission to run Docker commands. It runs the container in the background (`detach=True`) without any specific command or port mapping.
+
+### **63 ## Python script to fetch logs from a log website and print all logs with 404: not found
+
+### Answer - Use Python’s `requests` library to fetch the log file from a public URL and filter for lines containing `404`.
+
+### Detailed explanation (with examples)
+
+We’ll use a real log sample from GitHub that mimics Apache HTTP access logs. Example log source:
+`https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/apache_logs/apache_logs`
+
+Here’s the complete script:
+
+```
+import requests
+
+# Publicly available Apache log sample
+log_url = 'https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/apache_logs/apache_logs'
+
+try:
+    # Fetch the log content
+    response = requests.get(log_url)
+    response.raise_for_status()
+    logs = response.text.splitlines()
+
+    print("Log lines with 404 Not Found:\n")
+
+    # Search for lines with HTTP 404
+    for line in logs:
+        if ' 404 ' in line:
+            print(line)
+
+except requests.exceptions.RequestException as e:
+    print(f"Error fetching logs: {e}")
+```
+
+### Example matching line from the log:
+
+    216.46.173.126 - - [27/May/2015:10:27:47 +0000] "GET /presentations/logstash-monitorama-2013/images/kibana-search.png HTTP/1.1" 404 146
+
+This script:
+- Fetches logs using `requests.get()`
+- Splits the logs line by line
+- Filters for those containing ` 404 ` to avoid false matches in URLs or timestamps
+- Prints all matching lines to the console
+
+You can modify the script to write the filtered lines to a file or analyze other HTTP status codes like `500`, `403`, etc.
