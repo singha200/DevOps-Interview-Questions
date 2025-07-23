@@ -977,7 +977,8 @@ with tracer.start_as_current_span("my_span"):
 ```
 3. **Collect Trace Data**: Configure each microservice to send trace data to a centralized tracing backend like Jaeger or Zipkin. This can be done by setting up an exporter that sends the trace data to the tracing system.
 Example configuration for Jaeger exporter:
-```python
+python
+```
 from opentelemetry.exporter.jaeger import JaegerExporter
 jaeger_exporter = JaegerExporter(
     service_name="my_service",
@@ -986,7 +987,8 @@ jaeger_exporter = JaegerExporter(
 )
 trace.get_tracer_provider().add_span_processor(
     SimpleSpanProcessor(jaeger_exporter)
-)```
+)
+```
 4. **Visualize Traces**: Use the Jaeger or Zipkin UI to visualize the traces. This will show the flow of requests across microservices, including the time taken for each operation and any bottlenecks in the request path.
 5. **Analyze Spans**:
 Analyze the spans to identify performance issues, such as long-running operations or services that are causing delays. Look for patterns in the trace data that indicate where optimizations can be made.
