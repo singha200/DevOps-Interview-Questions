@@ -2,7 +2,7 @@
 
 - **Beginner (1-20)**
 - **Intermediate (21-40)**
-- **Advanced (41-60)**  
+- **Advanced (41-80)**  
 
 ---
 
