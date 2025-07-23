@@ -860,3 +860,66 @@ A **trust policy** in AWS IAM (Identity and Access Management) is a JSON documen
    - **Principal:** Defines the AWS account, IAM user, IAM role, or service that is allowed to assume the role. This can be specified using an ARN (Amazon Resource Name) or a wildcard (`*`) to allow any principal.
    - **Action:** Specifies the action that is allowed, which is typically `"sts:AssumeRole"` for trust policies.
    - **Condition (optional):** Specifies conditions under which the trust policy is valid. Conditions can include checks on the source IP address, MFA authentication, or other attributes.
+
+# Azure Questions 
+### **80. User reported randome downtime in webapp hosted in Azure web app service, how will you debug?**
+**Answer:**To debug random downtime in an Azure Web App hosted in Azure App Service, follow these steps:
+1. **Check Azure Service Health:**
+   - Start by checking the Azure Service Health dashboard to see if there are any ongoing issues or outages in the Azure region where your Web App is hosted. This can help determine if the downtime is due to a broader Azure service issue.
+2. **Review Application Insights Logs:**
+   - If Application Insights is enabled for your Web App, review the logs and telemetry data to identify any anomalies or errors that occurred during the reported downtime. Look for patterns in requests, response times, and exceptions.
+   - Check for any spikes in failed requests or high response times that may indicate performance issues or application errors.
+3. **Examine Web App Metrics:**
+   - Use the Azure Portal to review the metrics for your Web App, such as CPU usage, memory usage, and request counts. Look for any unusual spikes or trends that may correlate with the reported downtime.
+   - Pay attention to metrics like HTTP 5xx errors, which indicate server-side issues, and HTTP 4xx errors, which indicate client-side issues.
+4. **Check Deployment History:**
+   - Review the deployment history of your Web App to see if any recent deployments or changes were made around the time of the reported downtime. Sometimes, new deployments can introduce bugs or performance issues that lead to downtime.
+   - If a recent deployment is suspected to be the cause, consider rolling back to a previous version of the application to see if that resolves the issue.
+5. **Examine Scaling and Configuration:**
+   - Check the scaling settings for your Web App. If the app is under heavy load, ensure that it is scaled appropriately to handle the traffic. You may need to increase the instance count or adjust the scaling rules.
+   - Review the configuration settings, such as connection strings, app settings, and environment variables, to ensure they are correct and not causing any issues.
+6. **Review Custom Domain and SSL Configuration:**
+   - If you are using a custom domain or SSL certificate, verify that the configuration is correct and that there are no issues with the certificate expiration or domain resolution. Misconfigured domains or expired certificates can lead to downtime or accessibility issues.
+7. **Check for Throttling or Rate Limiting:**
+   - If your Web App is integrated with other Azure services (e.g., Azure SQL Database, Azure Storage), check if there are any throttling or rate limiting issues that may be affecting the performance of your application. Review the service limits and quotas for the integrated services to ensure they are not being exceeded.
+8. **Enable Diagnostic Logging:**
+   - If not already enabled, consider enabling diagnostic logging for your Web App. This can provide additional insights into the application's behavior and help identify the root cause of the downtime.
+   - You can enable logging for HTTP requests, application errors, and other events to capture detailed information about the application's performance
+
+### **81. How can you schedule a script to run everyday in Azure?**
+**Answer:**To schedule a script to run every day in Azure, you can use **Azure Functions** with a timer trigger or **Azure Logic Apps**. Here’s how to do it using both methods:
+### **Using Azure Functions with Timer Trigger:**
+1. **Create an Azure Function App:**
+   - Go to the Azure Portal and create a new Function App.
+   - Choose the runtime stack (e.g., .NET, Python, Node.js) based on the language you want to use for your script.
+   - Select the hosting plan and region for  your Function App.
+2. **Create a Timer Trigger Function:**
+   - In the Function App, create a new function and select the "Timer trigger" template.
+   - Set the schedule for the timer trigger using a CRON expression. For example, to run the script every day at 8:00 AM, use the following CRON expression:
+   ```   "0 0 8 * * *"
+   ```
+   - This expression means "at 8:00 AM every day."
+3. **Write Your Script:**
+   - In the function code editor, write your script logic. This can be any code that you want to execute daily, such as data processing, sending emails, or interacting with other Azure services.
+   - Make sure to test the function locally or in the Azure Portal to ensure it works as expected.
+4. **Deploy and Monitor:**
+   - Deploy the function to Azure and monitor its execution using the Azure Portal. You can view logs, execution history, and any errors that may occur during the function's execution.
+5. **Set Up Application Insights (Optional):**
+   - Optionally, you can enable Application Insights for your Function App to get detailed telemetry and monitoring for your script execution. This can help you track performance, errors, and other metrics.
+
+### **82. Cannot ssh or rdp to a vm, how will you debug?**
+**Answer:**If you cannot SSH or RDP to a virtual machine (VM) in Azure, follow these steps to debug the issue:
+1. **Check Network Security Group (NSG):**
+   - Verify that the Network Security Group (NSG) associated with the VM's subnet or network interface allows inbound traffic for the required ports (SSH: port 22, RDP: port 3389).
+   - Go to the Azure Portal, navigate to the VM, and check the NSG rules. Ensure that there are rules allowing inbound traffic from your IP address or a specific  IP range.
+2. **Verify Public IP Address:**
+   - Ensure that you are using the correct public IP address to connect to the VM. You can find the public IP address in the Azure Portal under the VM's "Overview" section.
+   - If the VM has a dynamic public IP address, it may have changed since the last time you connected. If necessary, update your connection settings with the new IP address.
+3. **Check VM Status:**
+   - Ensure that the VM is running and not in a stopped or deallocated state. You can check the VM's status in the Azure Portal under the "Overview" section.
+   - If the VM is stopped, start it and wait for it to become fully operational before attempting to connect again.
+4. **Review Boot Diagnostics:**
+   - Enable Boot Diagnostics for the VM to view the console output and screenshot of the VM's boot process. This can help identify any issues during the VM's startup that may be preventing SSH or RDP access.
+   - Go to the VM's "Boot diagnostics" section in the Azure Portal and check the console output and screenshot for any errors or warnings.
+5. **Check VM Extensions:**
+   - If you have installed any VM extensions (e.g., Azure VM Agent, Custom Script Extension), ensure that they are functioning correctly. Sometimes, misconfigured extensions can interfere with network connectivity.
