@@ -461,27 +461,67 @@ Kubernetes **Operators** automate complex application deployment and lifecycle m
 
 ---
 
-## **📢 Contribute & Stay Updated**  
+### **61. Please walk us through a typical day at your work as a senior DevOps engineer.**
+#### **Answer:**
+A typical day involves:
+1. **Morning Standup** – Discussing tasks with the team.
+2. **Monitoring** – Checking system health and alerts.
+3. **CI/CD Pipeline Management** – Reviewing builds and deployments.
+4. **Collaboration** – Working with developers on infrastructure needs.
+5. **Problem Solving** – Addressing any issues that arise.
+6. **Learning** – Keeping up with new tools and technologies.
+7. **Documentation** – Updating system documentation and processes.
 
-💡 **Want to contribute?**  
-We **welcome contributions!** If you have insights, new tools, or improvements, feel free to submit a **pull request**.  
+### **62. How do you handle a situation where a deployment fails in production?**
+#### **Answer:**
+1. **Immediate Rollback** – Use the CI/CD tool to revert to the last stable version.
+2. **Root Cause Analysis** – Investigate logs and metrics to identify the issue.
+3. **Fix the Issue** – Collaborate with the team to resolve the problem.
+4. **Test** – Ensure the fix works in a staging environment.
+5. **Redeploy** – Deploy the fixed version to production.
+6. **Post-Mortem** – Conduct a review to prevent future occurrences.
 
-📌 **How to Contribute?**
+### **64. Tell us about a challenging DevOps project you worked on.**
+#### **Answer:**
+One challenging project involved migrating a monolithic application to a microservices architecture. The steps included:
+1. **Assessment** – Analyzing the existing application and identifying components.
+2. **Planning** – Designing the microservices architecture and defining APIs.
+3. **Implementation** – Gradually refactoring the application into microservices.
+4. **Testing** – Ensuring each service worked independently and together.
+5. **Deployment** – Using Kubernetes for orchestration and Docker for containerization.
+6. **Monitoring** – Setting up Prometheus and Grafana for observability.    
 
-- Read the **[CONTRIBUTING.md](https://github.com/NotHarshhaa/DevOps-Interview-Questions/blob/master/CONTRIBUTING.md)** guide.  
-- Fix errors, add missing topics, or suggest improvements.  
-- Submit a **pull request** with your updates.  
+### **65. Tell us about your Senior DevOps Engineer experience.**
+#### **Answer:**
+As a Senior DevOps Engineer, I have led multiple projects focusing on automation, CI/CD pipelines, and cloud infrastructure. My responsibilities included:
+1. **Designing and implementing CI/CD pipelines**
+2. **Managing cloud infrastructure (AWS, Azure)**
+3. **Automating deployments using tools like Terraform and Ansible**
+4. **Monitoring system performance and reliability**
+5. **Collaborating with development teams to improve workflows**        
 
-📢 **Stay Updated:**  
-⭐ **Star the repository** to get notified about new updates and additions.  
-💬 **Join discussions** in **[GitHub Issues](https://github.com/NotHarshhaa/DevOps-Interview-Questions/issues)** to suggest improvements.  
+### **66. What is your contribution to the team as a Senior DevOps Engineer?**
+#### **Answer:**
+As a Senior DevOps Engineer, my contributions include:
+1. **Mentoring junior engineers** – Sharing knowledge and best practices.
+2. **Improving processes** – Streamlining CI/CD pipelines for efficiency.
+3. **Implementing best practices** – Ensuring security and compliance in deployments.
+4. **Driving innovation** – Evaluating and integrating new tools and technologies.      
 
----
-
-## **🌍 Community & Support**  
-
-🔗 **GitHub:** [@NotHarshhaa](https://github.com/NotHarshhaa)  
-📝 **Blog:** [ProDevOpsGuy](https://blog.prodevopsguy.xyz)  
-💬 **Telegram Community:** [Join Here](https://t.me/prodevopsguy)  
-
-![Follow Me](https://imgur.com/2j7GSPs.png)
+### **67. Tell us about your project in your current role.**
+#### **Answer:**
+In my current role, I am working on a project to automate the deployment of a multi-tier application using Kubernetes. The project involves:
+1. **Defining the architecture** – Using microservices and containerization.
+2. **Setting up CI/CD pipelines** – Using GitLab CI for automated testing and deployment.
+3. **Implementing monitoring** – Using Prometheus and Grafana for real-time insights.
+4. **Ensuring security** – Implementing network policies and RBAC in Kubernetes.
+5. **Documentation** – Maintaining clear documentation for the deployment process and architecture. 
+### **68. How do you handle conflicts within the DevOps team?**
+#### **Answer:**
+Handling conflicts involves:
+1. **Open Communication** – Encouraging team members to express their concerns.
+2. **Active Listening** – Understanding different perspectives.
+3. **Finding Common Ground** – Identifying shared goals and objectives.
+4. **Collaborative Problem Solving** – Working together to find a solution that satisfies all parties.
+5. **Escalation** – If necessary, involving a manager or team lead to mediate the situation.
+6. **Follow-Up** – Ensuring that the resolution is effective and that team dynamics improve.
