@@ -2806,7 +2806,7 @@ affinity:
 
 > Use `nodeSelector` for simple one-label matches, but switch to `nodeAffinity` when you need expressive logic, multiple label conditions, or soft placement preferences.
 
-## Question What is a Container Runtime in Kubernetes?
+## Question 80 What is a Container Runtime in Kubernetes?
 
 ### Answer  A **container runtime** in Kubernetes is the software responsible for **running containers**. It pulls container images, starts containers, stops them, and manages their lifecycle on each node in the cluster. Examples include **containerd**, **CRI-O**, and previously **Docker**.
 
