@@ -866,28 +866,180 @@ Example Fluentd configuration:
 - **Set audit logs for security compliance.**  
 
 ---
-
-## **📢 Contribute & Stay Updated**  
-
-💡 **Want to contribute?**  
-We **welcome contributions!** If you have insights, new tools, or improvements, feel free to submit a **pull request**.  
-
-📌 **How to Contribute?**
-
-- Read the **[CONTRIBUTING.md](https://github.com/NotHarshhaa/DevOps-Interview-Questions/blob/master/CONTRIBUTING.md)** guide.  
-- Fix errors, add missing topics, or suggest improvements.  
-- Submit a **pull request** with your updates.  
-
-📢 **Stay Updated:**  
-⭐ **Star the repository** to get notified about new updates and additions.  
-💬 **Join discussions** in **[GitHub Issues](https://github.com/NotHarshhaa/DevOps-Interview-Questions/issues)** to suggest improvements.  
-
+# Observability 
+- Monitoring is like car dashboard, can tell you if something is wrong, but observability is like having a mechanic who can tell you why the car is making a noise and how to fix it.
 ---
+### **61. What is the difference between monitoring and observability?**
+**Answer:**
+Monitoring is the process of collecting and analyzing data to ensure systems are functioning correctly, while observability is the ability to understand the internal state of a system based on the data collected. Observability goes beyond monitoring by providing insights into how and why systems behave the way they do, enabling proactive troubleshooting and performance optimization.
 
-## **🌍 Community & Support**  
+### **62. What are the three pillars of observability?**
+**Answer:**
+The three pillars of observability are:
+1. **Metrics**: Quantitative measurements of system performance (e.g., CPU usage, memory consumption).
+2. **Logs**: Textual records of events that occur within a system, providing context and details about operations.
+3. **Traces**: Records of the execution path of requests through a system, showing how different components interact and the time taken for each operation.
 
-🔗 **GitHub:** [@NotHarshhaa](https://github.com/NotHarshhaa)  
-📝 **Blog:** [ProDevOpsGuy](https://blog.prodevopsguy.xyz)  
-💬 **Telegram Community:** [Join Here](https://t.me/prodevopsguy)  
+### **63. How do you implement distributed tracing?**
+**Answer:**
+Distributed tracing can be implemented using tools like OpenTelemetry, Jaeger, or Zipkin. It involves instrumenting your application code to generate trace data, which includes unique identifiers for requests and spans that represent operations within the request. The trace data is then collected and visualized to understand the flow of requests across distributed systems.
+Example using OpenTelemetry in Python:
+```python
+from opentelemetry import trace
+tracer = trace.get_tracer(__name__)
+with tracer.start_as_current_span("my_span"):
+    # Your code here
+```
+### **64 How to emit custom log and metrics in your application?**
+**Answer:**
+To emit custom logs and metrics in your application, you can use libraries like `logging` for logs and `prometheus_client` for metrics in Python. Need to tell instrumentation where to send the logs and metrics, such as a file or a monitoring system like Prometheus.
+Also can use opentelmetry to instrument your application for both logs and metrics.
+For example:
+```python
+import logging
+import prometheus_client
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+# Emit a log message
+logger.info("This is a custom log message.")
+# Set up Prometheus metrics
+counter = prometheus_client.Counter('my_custom_counter', 'Description of my custom counter')
+# Increment the counter
+counter.inc()
+```
+### **65. What kind of metrics do you scrape with prometheus in your current project?**
+**Answer:**
+In my current project, I scrape various metrics with Prometheus, including:
+- **Application Metrics**: Custom application metrics such as request counts, error rates, and response times.
+- **Infrastructure Metrics**: System-level metrics like CPU usage, memory consumption, disk I/O, and network traffic.
+- **Database Metrics**: Metrics from databases like query performance, connection counts, and cache hit rates.
+- **Service Metrics**: Metrics from microservices, including service availability, latency, and throughput.
+- **Business Metrics**: Key performance indicators (KPIs) relevant to the business, such as user sign-ups, transaction volumes, and revenue metrics.
+These metrics help monitor the health and performance of the application and infrastructure, enabling proactive issue detection and resolution. We use prometheus exporters to collect metrics from various components and visualize them in Grafana dashboards for better insights. We use kube state metrics to collect metrics from kubernetes cluster and node exporter to collect metrics from nodes.
 
-![Follow Me](https://imgur.com/2j7GSPs.png)
+### **66. Have you worked on observability if yes, explain what did you do?**
+**Answer:**
+Yes, I have worked on observability in my previous projects. My responsibilities included:
+- **Implementing Distributed Tracing**: Instrumented the application using OpenTelemetry to capture traces across microservices. This helped identify bottlenecks and latency issues in the request flow.
+- **Setting Up Metrics Collection**: Configured Prometheus to scrape application and infrastructure metrics. Created custom metrics to monitor key performance indicators (KPIs) relevant to the business.
+- **Log Management**: Implemented structured logging using libraries like `logrus` or `winston` to capture detailed logs. Set up a centralized logging solution using ELK Stack (Elasticsearch, Logstash, Kibana) to aggregate and analyze logs from different services.
+- **Creating Dashboards**: Developed Grafana dashboards to visualize metrics and logs. This provided real-time insights into system health, performance, and user behavior.
+- **Alerting and Incident Response**: Configured alerts in Prometheus and Grafana to notify the team of critical issues. Established incident response procedures to quickly address and resolve incidents based on the insights gathered from observability tools.
+- **Continuous Improvement**: Regularly reviewed and improved observability practices by adding new metrics, refining logging strategies, and enhancing tracing capabilities to ensure comprehensive visibility into the system.
+This work significantly improved our ability to monitor, troubleshoot, and optimize the application, leading to better performance and reliability.
+
+### **67. What is the difference between push and pull model in observability and monitoring?**
+**Answer:**
+The push and pull models in observability and monitoring refer to how data is collected and sent to the monitoring system:
+- **Pull Model**: In this model, the monitoring system (e.g., Prometheus) periodically scrapes data from the target systems. The target systems expose metrics via an HTTP endpoint, and the monitoring system pulls the data at defined intervals. This model is commonly used in Prometheus, where exporters expose metrics for scraping. The pull model allows for better control over data collection intervals and reduces the load on target systems since they only respond when requested.
+- **Push Model**: In this model, the target systems actively send (or "push") their metrics to the monitoring system. This is often used in scenarios where the target systems cannot be easily scraped or when real-time data is required. Tools like StatsD or InfluxDB use the push model, where applications send metrics directly to the monitoring system. The push model can lead to data duplication if multiple instances push the same metrics, and it may require additional configuration to handle data retention and aggregation.
+
+### **68. Which tool you used to build observability stack?**
+**Answer:**
+In my projects, I have used a combination of tools to build the observability stack:
+- **Prometheus**: For metrics collection and monitoring. It scrapes metrics from various exporters and provides powerful querying capabilities with PromQL.
+- **Grafana**: For visualizing metrics and creating interactive dashboards. It integrates seamlessly with Prometheus and other data sources.
+- **OpenTelemetry**: For distributed tracing and instrumentation. It allows capturing traces across microservices and provides insights into request flows.
+- **Elasticsearch, Logstash, and Kibana (ELK Stack)**: For log management and analysis. Logstash collects and processes logs, Elasticsearch stores them, and Kibana provides a user-friendly interface for searching and visualizing logs.
+- **Jaeger or Zipkin**: For distributed tracing. These tools help visualize the flow of requests across microservices and identify performance bottlenecks.
+- **Filebeat or Fluentd**: For log shipping. These lightweight agents collect logs from various sources and forward them to Elasticsearch or other log management systems.
+- **Alertmanager**: For managing alerts generated by Prometheus. It handles alert notifications and deduplication.
+This combination of tools provides a comprehensive observability stack that covers metrics, logs, and traces, enabling effective monitoring, troubleshooting, and performance optimization across distributed systems.
+
+### **69. Users report slowness in app. Logs don't show errors, and CPU is good. How do you debug?**
+**Answer:**
+To debug the reported slowness in the application, I would follow these steps:
+1. **Check Application Metrics**: Use Prometheus to analyze application metrics such as request latency, throughput, and error rates. Look for any anomalies or spikes in latency that could indicate performance issues.
+2. **Examine Distributed Traces**: If distributed tracing is implemented (e.g., using OpenTelemetry or Jaeger), analyze the traces to identify slow spans or bottlenecks in the request flow. Look for any services that are taking longer than expected to respond.
+3. **Review Database Performance**: Check database metrics and logs to see if there are any slow queries or locking issues. Use tools like `EXPLAIN` in SQL databases to analyze query performance and optimize as needed.
+4. **Inspect Resource Utilization**: Even if CPU usage is good, check other resource utilization metrics such as memory, disk I/O, and network traffic. High memory usage or disk contention can lead to application slowness.
+5. **Analyze Logs**: Review application logs for any warnings or unusual patterns that might indicate performance issues. Look for logs related to long-running operations or external service calls that could be causing delays.
+6. **Check External Dependencies**: If the application relies on external services (e.g., APIs, third-party services), check their availability and response times.
+Use tools like `curl` or `Postman` to test the response times of these services.
+7. **Load Testing**: If the issue persists, consider performing load testing to simulate high traffic and identify how the application behaves under stress. This can help pinpoint performance bottlenecks.
+8. **Profiling**: If necessary, use profiling tools to analyze the application code and identify any inefficient code paths or resource-intensive operations that could be causing slowness.
+9. **Configuration Review**: Review application and server configurations to ensure they are optimized for performance. Check for any misconfigurations that could lead to resource contention or delays.
+10. **Collaborate with Team**: If the issue is complex, collaborate with team members to gather additional insights and perspectives. Sometimes, a fresh set of eyes can help identify overlooked issues.
+By systematically analyzing metrics, logs, traces, and resource utilization, I can identify the root cause of the slowness and implement appropriate fixes or optimizations.
+
+### **71. How do you trace a request across multiple microservices in a kubernetes environment?**
+**Answer:**
+To trace a request across multiple microservices in a Kubernetes environment, I would follow these steps:
+1. **Instrument Microservices**: Use OpenTelemetry or similar libraries to instrument each microservice in the request flow. This involves adding code to generate trace spans for each operation within the service. 
+2. **Generate Trace Context**: Ensure that each microservice generates a unique trace ID for each request and propagates it through HTTP headers (e.g., `X-Request-ID`, `traceparent`). This allows downstream services to correlate spans with the original request.
+Example in Python using OpenTelemetry:
+```python
+from opentelemetry import trace
+tracer = trace.get_tracer(__name__)
+with tracer.start_as_current_span("my_span"):
+    # Your code here
+```
+3. **Collect Trace Data**: Configure each microservice to send trace data to a centralized tracing backend like Jaeger or Zipkin. This can be done by setting up an exporter that sends the trace data to the tracing system.
+Example configuration for Jaeger exporter:
+```python
+from opentelemetry.exporter.jaeger import JaegerExporter
+jaeger_exporter = JaegerExporter(
+    service_name="my_service",
+    agent_host_name="jaeger-agent", 
+    agent_port=6831,
+)
+trace.get_tracer_provider().add_span_processor(
+    SimpleSpanProcessor(jaeger_exporter)
+)```
+4. **Visualize Traces**: Use the Jaeger or Zipkin UI to visualize the traces. This will show the flow of requests across microservices, including the time taken for each operation and any bottlenecks in the request path.
+5. **Analyze Spans**:
+Analyze the spans to identify performance issues, such as long-running operations or services that are causing delays. Look for patterns in the trace data that indicate where optimizations can be made.
+6. **Set Up Alerts**: Configure alerts based on trace data to notify the team of performance issues or anomalies. This can help proactively address issues before they impact users.
+7. **Continuous Improvement**: Regularly review and refine the tracing implementation to ensure comprehensive coverage of all critical paths in the application. Add new spans as needed to capture additional details about request flows.
+By following these steps, I can effectively trace requests across multiple microservices in a Kubernetes environment, gaining valuable insights into system performance and user experience.
+
+### **73. A pod crashes randomly with OOM killer. How do you debug?**
+**Answer:**
+To debug a pod that crashes randomly with the OOM (Out of Memory) killer, I would follow these steps:
+1. **Check Pod Logs**: Use `kubectl logs <pod-name>` to view the logs of the crashed pod. Look for any error messages or warnings that might indicate memory issues or resource exhaustion.
+2. **Inspect Pod Events**: Use `kubectl describe pod <pod-name>` to check the events associated with the pod. Look for events related to OOM kills, which will indicate that the pod was terminated due to exceeding its memory limits.
+3. **Review Resource Requests and Limits**: Check the resource requests and limits defined for the pod in its YAML configuration. Ensure that the memory limits are set appropriately based on the application's requirements. If the limits are too low, consider increasing them to prevent OOM kills.
+Example:
+```yaml
+resources:
+  requests:
+    memory: "512Mi"
+  limits:
+    memory: "1Gi"
+```
+4. **Analyze Memory Usage**: If the pod is consistently hitting memory limits, analyze the application's memory usage. Use tools like `kubectl top pod <pod-name>` to monitor the current memory usage of the pod. If the usage is close to the limit, it may indicate a memory leak or inefficient memory usage in the application.
+5. **Check for Memory Leaks**: If the application is written in a language that supports memory profiling (e.g., Java, Python), use profiling tools to analyze memory usage patterns. Look for objects that are not being released or excessive memory allocations that could lead to memory leaks.
+6. **Review Application Code**: If memory leaks are suspected, review the application code for potential issues. Look for:
+   - Unreleased resources (e  .g., database connections, file handles).
+   - Inefficient data structures or algorithms that consume excessive memory.
+   - Large in-memory caches that are not being cleared.
+7. **Increase Pod Memory Limits**: If the application genuinely requires more memory, consider increasing the memory limits for the pod. This can be done by updating the deployment or stateful set configuration:
+```yaml
+resources:
+  requests:
+    memory: "1Gi"
+  limits:
+    memory: "2Gi"
+```
+8. **Monitor Memory Usage Over Time**: Set up monitoring tools (e.g., Prometheus, Grafana) to track memory usage over time. This can help identify trends and patterns in memory consumption, allowing for proactive adjustments to resource limits.
+9. **Test in Staging Environment**: If possible, replicate the issue in a staging environment with similar resource constraints. This can help identify whether the issue is related to specific workloads or configurations.
+10. **Consult Documentation and Community**:
+If the issue persists, consult the documentation for the application or framework being used. Additionally, search community forums or issue trackers for similar problems and potential solutions.
+By following these steps, I can systematically identify the root cause of the OOM kills and implement appropriate fixes or optimizations to prevent future occurrences.
+
+### **74. You got woken up at 3 AM by false alert. How do you handle it?**
+**Answer:**
+Handling a false alert at 3 AM requires a calm and systematic approach:
+1. **Acknowledge the Alert**: First, acknowledge the alert in the monitoring system to prevent further notifications and to indicate that you are investigating the issue.
+2. **Review Alert Details**: Check the alert details to understand what triggered it. Look for the specific metrics, thresholds, and conditions that caused the alert to fire.
+3. **Check System Status**: Use monitoring tools (e.g., Grafana, Prometheus) to check the current status of the system. Look for any anomalies or unusual patterns in the metrics that may have caused the alert.
+4. **Verify the Alert**: Cross-check the alert with logs and traces to see if there are any related events or errors that could explain the alert. If the system appears to be functioning normally and there are no issues in the logs, it may indicate a false positive.
+5. **Document the Incident**:
+Document the incident in your incident management system, including the alert details, investigation steps, and findings. This helps in future analysis and improves the alerting system.
+6. **Adjust Alert Thresholds**: If the alert was indeed a false positive, consider adjusting the alert thresholds or conditions to reduce the likelihood of similar false alerts in the future. This may involve fine-tuning the alerting rules or adding additional conditions to filter out noise.
+7. **Communicate with the Team**: If the alert was a false positive, communicate with the team to inform them about the incident. This helps maintain transparency and ensures that everyone is aware of the situation.
+8. **Review Alerting Strategy**: After handling the immediate incident, review the overall alerting strategy. Analyze whether the alerting rules are effective and whether they need to be refined to reduce noise and improve reliability.
+9. **Set Up Post-Incident Review**: If the false alert was significant enough, consider scheduling a post-incident review (PIR) to discuss the incident, its impact, and any improvements that can be made to the alerting system or processes.
+10. **Rest and Recharge**: After addressing the incident, take some time to rest and recharge. Sleep is crucial for maintaining focus and effectiveness in handling future incidents.
+By following these steps, I can effectively handle a false alert while minimizing disruption and ensuring that the alerting system is improved for future incidents.
