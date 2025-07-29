@@ -525,3 +525,104 @@ Handling conflicts involves:
 4. **Collaborative Problem Solving** – Working together to find a solution that satisfies all parties.
 5. **Escalation** – If necessary, involving a manager or team lead to mediate the situation.
 6. **Follow-Up** – Ensuring that the resolution is effective and that team dynamics improve.
+
+
+```
+Leadership roles interview questions
+
+General
+- Tell me about some of your most recent computer programming projects.
+- Provide an example when your ethics were tested.
+- Name a time when your patience was tested. How did you keep your emotions in check?
+
+Business
+
+- **Give me an example of when you thought outside of the box. How did it help your employer?**
+  - **Provide a time when you were able to identify a complex problem, evaluate the options, and implement a solution. How did the solution benefit your employer?**
+  - **Describe methods you have used to design, develop, and/or modify software systems. How do you predict and measure outcome and consequences of design?**
+  - Share an experience in which you successfully improved the performance of existing software.
+  - Share an experience when you applied new technology or information in your job. How did it help your company?
+  - Tell me about an experience in which you analyzed information and evaluated results to choose the best solution to a problem.
+  - Would you consider analyzing data or information a strength? How so?
+  - Share an effective approach to working with a large amount of information/data. How has your approach affected your company?
+  - Share an experience in which your ability to consider the costs or benefits of a potential action helped you choose the most appropriate action.
+  - Tell me about a time when you successfully determined the cause of an operating error at your company and solved the problem.
+  - Provide an example of a project you worked on that demonstrates your programming abilities. What was your role in the project?
+  - Name a time when you identified strengths and weaknesses of alternative solutions to problems. What was the impact?
+  - Tell me about a time when your ability to analyze needs and product requirements helped you create an effective design or make an informed decision to benefit your company.
+  - Tell me about software system testing and validation procedures, programming, or documentation with you developed.
+  - Name a time when your creativity or alternative thinking solved a problem in your workplace.
+  - What factors do you consider to determine the feasibility of designs within time and cost constraints?
+  - Share an experience in which you were able to generate a new design or modify a current design to better serve the needs of your customers.
+  - Share an experience in which your retrieval or manipulation of data helped you analyze system capabilities or requirements.
+  - Share an experience in which you conducted a test of a product, service, or process and successfully improved the quality or performance.
+  - Share an experience in which your understanding of a current or upcoming problem helped your company to respond to the problem.
+  - How do you ensure that specifications for software system installation and equipment functioning are met?
+  - Tell me about successful system performance standards which you determined.
+  - Share an experience in which evaluating information helped you ensure correct hardware configuration.
+  - In your experience, what is the key to ensuring your company was compliant with all laws, regulations and standards that were applicable to your area of responsibility?
+  - Share a time when you successfully used scientific rules or methods to solve a problem at work.
+  - What is the most challenging part of budgeting for you?
+
+# Communication
+
+  - **Share an experience in which you successfully shared a difficult piece of information. (Make sure that the candidate has open lines of communication.)**
+  - **Share an example of a time you had to gather information from multiple sources. How did you determine which information was relevant?**
+  - **How would you rate your writing skills? (Ask for an example that demonstrates great writing skills.)**
+  - Share an experience you had in dealing with a difficult person and how you handled the situation.
+  - Provide an example of a time when you were able to demonstrate excellent listening skills. What was the situation and outcome?
+  - Please share an experience in which you presented to a group. What was the situation and how did it go?
+  - Name a time when your advice to management led to an improvement in your company or otherwise helped your employer.
+  - Share an experience in which conferring with others helped you in your work on a project.
+  - How do you balance cooperation with others and independent thinking? Share an example.  (Try to determine if the candidate has a cooperative attitude or is otherwise good-natured.)
+  - Provide a time when you successfully explained software system design and/or maintenance to a customer.
+  - Describe an experience in which you identified the educational needs of your students and successfully developed a way to teach/train them.
+  - Please share an experience in which you successfully taught a difficult principle or concept. How were you able to be successful?
+  - Describe a time when you successfully persuaded another person to change his/her way of thinking or behavior.
+  - Share an experience in which personal connections to coworkers or others helped you to be successful in your work. (Make sure candidate works well with others.)
+  - Provide an experience in which you were sensitive to someone's needs or feelings. How did your helpfulness affect your work environment?
+  - Provide an example when you were able to prevent a problem because you foresaw the reaction of another person.
+  - Describe an experience in which your ability to work well with others and reconcile differences helped your company or employer. (Make sure the candidate knows how to negotiate.)
+
+# Management & Leadership
+
+  - Tell me how you organize, plan, and prioritize your work.
+  - What have you found to be the best way to monitor the performance of your work and/or the work of others? Share a time when you had to take corrective action.
+  - Provide an example of a time when you successfully organized a diverse group of people to accomplish a task.
+  - Tell me about the last time you monitored or reviewed information and detected a problem. How did you respond?
+  - Provide an experience that demonstrates your ability to manage time effectively. What were the challenges and results?
+  - Share an experience in which your willingness to lead or offer an opinion helped your company.
+  - Share an experience in which you successfully coordinated with others. How about a coordination effort that was not as successful?
+  - Tell me about a time when you supervised personnel. What methods made you a successful supervisor?
+  - In your experience, what is the key to developing a good team? (Look for how they build mutual trust, respect, and cooperation.)
+  - Tell me about the last time you oversaw the work of someone else. How did you effectively motivate, develop, and direct the worker(s)?
+  - Provide an experience in which your ability to actively find ways to help people improved your company or your own work ethic.
+  - Provide an example of when you set expectations and monitored the performance of subordinates. What guidance and direction did you find most effective?
+  - Please share with me an example of how you helped coach or mentor someone. What improvements did you see in the person's knowledge or skills?
+
+# Self
+
+  - What are some long-range objectives that you developed in your last job? What did you do to achieve them?
+  - Share an experience in which your attention to detail and thoroughness had an impact on your last company.
+  - Share an example of when you established and accomplished a goal that was personally challenging. What helped you succeed?
+  - Tell me about a time when you developed your own way of doing things or were self-motivated to finish an important task.
+  - Provide an example of when you were persistent in the face of obstacles.
+  - Share a time when you willingly took on additional responsibilities or challenges. How did you successfully meet all of the demands of these responsibilities? (Make sure the candidate is a self-starter and can demonstrate some initiative.)
+  - Provide a time when you worked in a rapidly evolving workplace. How did you deal with the change? (Make sure the candidate is flexible.)
+  - Provide a time when you dealt calmly and effectively with a high-stress situation.
+  - Share an experience in which you used new training skills, ideas, or a method to adapt to a new situation or improve an ongoing one. (Look for the candidate's ability to learn.)
+  - Share an example of when you went above and beyond the "call of duty". (Look for answers that show the candidate is dependable.)
+
+# Technical
+
+  - What does “program to interfaces, not implementations” mean?
+  - What are the differences between continuous integration, continuous delivery, and continuous deployment?
+  - What does SOLID stand for? What are its principles?
+  - What Is BASE Property Of A System?
+  - What Is CAP Theorem?
+  - Do you familiar with The Twelve-Factor App principles?
+  - What are Heuristic Exceptions?
+  - What Is Shared Nothing Architecture? How Does It Scale?
+  - What Does Eventually Consistent Mean?
+
+```
